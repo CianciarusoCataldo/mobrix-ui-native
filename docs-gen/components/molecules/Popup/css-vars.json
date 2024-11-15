@@ -1,0 +1,26 @@
+{
+  "--mbx-popup-background": {
+    "description": "Fallback value for `--mbx-popup-background-light` and `--mbx-popup-background-dark`"
+  },
+  "--mbx-popup-background-light": {
+    "defaultGlobal": "--mbx-background-light",
+    "description": "Popup background when [dark mode](https://cianciarusocataldo.github.io/mobrix-ui/docs/shared/props/#dark)  is `off`",
+    "fallback": "--mbx-popup-background"
+  },
+  "--mbx-popup-background-dark": {
+    "defaultGlobal": "--mbx-background-dark",
+    "fallback": "--mbx-popup-background",
+    "description": "Popup background when [dark mode](https://cianciarusocataldo.github.io/mobrix-ui/docs/shared/props/#dark) is `on`"
+  },
+  "--mbx-popup-text": { "description": "Fallback value for `` and ``" },
+  "--mbx-popup-text-light": {
+    "defaultGlobal": "--mbx-text-light",
+    "fallback": "--mbx-popup-text",
+    "description": "Popup text color when [dark mode](https://cianciarusocataldo.github.io/mobrix-ui/docs/shared/props/#dark) is `off`"
+  },
+  "--mbx-popup-text-dark": {
+    "defaultGlobal": "--mbx-text-dark",
+    "fallback": "--mbx-popup-text",
+    "description": "Popup text color when [dark mode](https://cianciarusocataldo.github.io/mobrix-ui/docs/shared/props/#dark) is `on`"
+  }
+}

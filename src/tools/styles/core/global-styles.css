@@ -1,0 +1,159 @@
+@import url("behavior.css");
+@import url("animations.css");
+@import url("icons.css");
+
+[data-mbx-id] {
+  --mbx-op: 1;
+  --mbx-sh: 0 5px 13px -1px var(--mbx-c-sh);
+  --mbx-an: none;
+  --mbx-tr: none;
+  --mbx-trdur: 0.2s;
+  --mbx-trprop: all;
+  --mbx-trtran: ease-in;
+  --mbx-andur: 0.3s;
+  opacity: var(--mbx-op);
+  box-shadow: var(--mbx-sh);
+  -webkit-box-shadow: var(--mbx-sh);
+  -moz-box-shadow: var(--mbx-sh);
+  -o-box-shadow: var(--mbx-sh);
+  animation: var(--mbx-an) var(--mbx-andur);
+  -webkit-animation: var(--mbx-an) var(--mbx-andur);
+  -moz-animation: var(--mbx-an) var(--mbx-andur);
+  -ms-animation: var(--mbx-an) var(--mbx-andur);
+  -o-animation: var(--mbx-an) var(--mbx-andur);
+  align-items: var(--mbx-align);
+  text-align: var(--mbx-align);
+  --mbx-def-bg: var(--mbx-ovbg, var(--mbx-defbg, var(--mbx-c-bg)));
+  --mbx-def-txt: var(--mbx-ovtxt, var(--mbx-deftxt, var(--mbx-c-txt)));
+  --mbx-def-bgh: var(--mbx-ovbgh, var(--mbx-defbgh, var(--mbx-c-bg-h)));
+  --mbx-def-txth: var(--mbx-ovtxth, var(--mbx-deftxth, var(--mbx-c-txt-h)));
+  --mbx-bgh: var(--mbx-ovbghl, var(--mbx-bg-h-l, var(--mbx-def-bgh)));
+  --mbx-txth: var(--mbx-ovtxthl, var(--mbx-txt-h-l, var(--mbx-def-txth)));
+  --mbx-bgd: var(--mbx-ovbgd, var(--mbx-bg-d, var(--mbx-def-bg)));
+  --mbx-bgl: var(--mbx-ovbgl, var(--mbx-bg-l, var(--mbx-def-bg)));
+  --mbx-bg: var(--mbx-bgl);
+  --mbx-txt: var(--mbx-ovtxtl, var(--mbx-txt-l, var(--mbx-def-txt)));
+}
+
+[data-mbx-id][data-mbx-trn] {
+  --mbx-bg: transparent !important;
+  --mbx-bgh: transparent !important;
+  --mbx-c-bg: transparent !important;
+  --mbx-c-bgc: transparent !important;
+  --mbx-c-bg-h: transparent !important;
+  --mbx-c-bgc-h: transparent !important;
+}
+
+[data-mbx-img][data-mbx-dsb],
+[data-mbx-id][data-mbx-dsb] {
+  cursor: unset !important;
+  opacity: 0.6 !important;
+}
+
+[data-mbx-id][data-mbx-dk] {
+  --mbx-bg: var(--mbx-bgd);
+  --mbx-rvrbg: var(--mbx-bgl);
+  --mbx-txt: var(--mbx-ovtxtd, var(--mbx-txt-d, var(--mbx-def-txt)));
+  --mbx-bgh: var(--mbx-ovbghd, var(--mbx-bg-h-d, var(--mbx-def-bgh)));
+  --mbx-txth: var(--mbx-ovtxthd, var(--mbx-txt-h-d, var(--mbx-def-txth)));
+}
+
+[data-mbx-id][data-mbx-wall],
+[data-mbx-id][data-mbx-wbc],
+[data-mbx-id][data-mbx-wb] {
+  background: var(--mbx-bg);
+}
+
+[data-mbx-id][data-mbx-wallc] {
+  --mbx-def-bg: var(--mbx-ovbg, var(--mbx-defbg, var(--mbx-c-bgc)));
+  --mbx-def-bgh: var(--mbx-ovbgh, var(--mbx-defbgh, var(--mbx-c-bgc-h)));
+  background-color: var(--mbx-bg);
+}
+
+[data-mbx-id][data-mbx-wallc],
+[data-mbx-id][data-mbx-wall],
+[data-mbx-id][data-mbx-wbc],
+[data-mbx-id][data-mbx-wch],
+[data-mbx-id][data-mbx-wc] {
+  color: var(--mbx-txt, var(--mbx-def-txt));
+}
+
+[data-mbx-id][data-mbx-rt] {
+  rotate: -90deg;
+  --mbx-trdur: 0.1s;
+}
+[data-mbx-id][data-mbx-rt="true"] {
+  transform: rotate(180deg);
+}
+
+[data-mbx-id][data-mbx-dir] {
+  display: flex;
+  flex-direction: row;
+}
+
+[data-mbx-id][data-mbx-dir="right"] {
+  flex-direction: row-reverse;
+}
+
+[data-mbx-id][data-mbx-dir="top"] {
+  flex-direction: column;
+}
+
+[data-mbx-id][data-mbx-dir="bottom"] {
+  flex-direction: column-reverse;
+}
+
+[data-mbx-id],
+[data-mbx-id]:hover,
+[data-mbx-id]:active {
+  transition: var(--mbx-trprop) var(--mbx-trdur) var(--mbx-trtran);
+  -webkit-transition: var(--mbx-trprop) var(--mbx-trdur) var(--mbx-trtran);
+  -moz-transition: var(--mbx-trprop) var(--mbx-trdur) var(--mbx-trtran);
+  -o-transition: var(--mbx-trprop) var(--mbx-trdur) var(--mbx-trtran);
+}
+
+[data-mbx-img],
+[data-mbx-img]:focus,
+[data-mbx-img]:focus-visible,
+[data-mbx-id],
+[data-mbx-id]:focus,
+[data-mbx-id]:focus-visible {
+  outline: none;
+}
+
+@media (hover: hover) {
+  [data-mbx-id]:hover {
+    opacity: var(--mbx-op-hov, var(--mbx-op));
+  }
+
+  [data-mbx-id][data-mbx-wallc][data-mbx-hv]:hover {
+    background-color: var(--mbx-bgh);
+  }
+
+  [data-mbx-id][data-mbx-wall][data-mbx-hv]:hover {
+    background: var(--mbx-bgh);
+  }
+
+  [data-mbx-id][data-mbx-wallc][data-mbx-hv]:hover,
+  [data-mbx-id][data-mbx-wall][data-mbx-hv]:hover,
+  [data-mbx-id][data-mbx-wch][data-mbx-hv]:hover {
+    color: var(--mbx-txth);
+  }
+}
+
+[data-mbx-id]:focus-visible {
+  --mbx-sh-tf: 0 5px 13px -1px var(--mbx-sh-fc, var(--mbx-c-sh));
+  opacity: var(--mbx-op-f, var(--mbx-op));
+  box-shadow: var(--mbx-sh-def, var(--mbx-sh-tf));
+  -webkit-box-shadow: var(--mbx-sh-def, var(--mbx-sh-tf));
+  -moz-box-shadow: var(--mbx-sh-def, var(--mbx-sh-tf));
+  -o-box-shadow: var(--mbx-sh-def, var(--mbx-sh-tf));
+}
+
+[data-mbx-id][data-mbx-cfc]:focus-visible {
+  color: var(--mbx-c-fc);
+}
+
+[data-mbx-id]:active {
+  opacity: var(--mbx-op-act, var(--mbx-op-hov, var(--mbx-op)));
+}

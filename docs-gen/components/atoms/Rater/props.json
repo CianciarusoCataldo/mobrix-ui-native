@@ -1,0 +1,31 @@
+{
+  "value": { "default": "0", "description": "actual vote", "type": "number" },
+  "max": {
+    "default": "5",
+    "description": "max vote (max number of icons displayed)",
+    "type": "number"
+  },
+  "readOnly": {
+    "default": "false",
+    "description": "if `true`, the rate can't be changed by clicking on the icons",
+    "type": "boolean"
+  },
+  "emptyIcon": {
+    "description": "Empty rate icon, used to render the rate value. If not set, a standard unfilled star icon is used",
+    "type": "JSX.Element"
+  },
+  "fullIcon": {
+    "description": "Full rate icon, used to render the rate value. If not set, a standard filled star icon is used",
+    "type": "JSX.Element"
+  },
+  "vertical": {
+    "default": "false",
+    "description": "if `true`, rate icons will be displayed vertically",
+    "type": "boolean"
+  },
+  "onChange": {
+    "type": "(newValue: number) => void",
+    "default": "() => {}",
+    "description": "callback triggered when user select a vote"
+  }
+}

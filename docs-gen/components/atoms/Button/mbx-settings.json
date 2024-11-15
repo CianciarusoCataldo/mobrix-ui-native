@@ -1,0 +1,13 @@
+{
+  "since": "1.0.0",
+  "description": "A tiny and smart button component.",
+  "examples": [],
+  "extend": {
+    "group": {
+      "ComponentWithChildren": {
+        "type": "JSX.Element | string"
+      },
+      "ClickableComponent": {}
+    }
+  }
+}

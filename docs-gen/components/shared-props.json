@@ -1,0 +1,116 @@
+{
+  "key": {
+    "description": "React key, the standard [key parameter](https://reactjs.org/docs/lists-and-keys.html)",
+    "type": "string"
+  },
+
+  "className": {
+    "description": "custom className applied on main container",
+    "type": "string"
+  },
+
+  "dark": {
+    "description": "Enable/disable dark mode",
+    "default": "false",
+    "type": "boolean"
+  },
+
+  "hide": {
+    "type": "boolean",
+    "description": "Hide/show component",
+    "default": "false"
+  },
+
+  "id": {
+    "type": "string",
+    "description": "[id parameter](https://www.w3schools.com/html/html_id.asp) (for styling/testing purpose, to easily find the component into the DOM)"
+  },
+
+  "shadow": {
+    "type": "boolean",
+    "description": "Enable/disable shadow behind component",
+    "default": "true"
+  },
+
+  "style": {
+    "description": "Css inline properties applied on main container",
+    "type": "CSSProperties"
+  },
+
+  "unstyled": {
+    "description": "If `true`, no standard MoBrix-ui styles will be applied on the components (useful for example, with image buttons)",
+    "default": "false",
+    "type": "boolean"
+  },
+
+  "animated": {
+    "description": "Enable/disable component animations",
+    "default": "true",
+    "type": "boolean"
+  },
+
+  "animation": {
+    "description": "If `animated`=`true`, this parameter specifies which animation is used when component is rendered",
+    "type": "'fade-in' | 'slide-in-left' | 'slide-in-right' | 'slide-in-top' | 'shake'"
+  },
+
+  "background": {
+    "description": "Enable/disable component background",
+    "default": "true",
+    "type": "boolean"
+  },
+
+  "hover": {
+    "default": "true",
+    "description": "Enable/disable component hover standard styles",
+    "type": "boolean"
+  },
+
+  "active": {
+    "default": "false",
+    "description": "Enable/disable component click standard styles",
+    "type": "boolean"
+  },
+
+  "disabled": {
+    "description": "If true, disable the component. The effect may vary depending on the component type",
+    "default": "false",
+    "type": "boolean"
+  },
+
+  "onKeyDown": {
+    "type": "(keyEvent : any) => void",
+    "description": "Custom callback triggered when a key is pressed while using the component (for example, when writing text inside an `Input` component)."
+  },
+
+  "onFocus": {
+    "type": "() => void",
+    "description": "Custom callback triggered when the component get the focus (for example, through tab key)"
+  },
+
+  "onFocusLost": {
+    "type": "() => void",
+    "description": "Custom callback triggered when the component lose the focus (for example, when user clicks outside it)"
+  },
+
+  "props": {
+    "description": "Custom additional properties, applied to the component",
+    "type": "Record<string, any>"
+  },
+
+  "a11y": {
+    "description": "Enable/disable accessibility features",
+    "default": "true",
+    "type": "boolean"
+  },
+
+  "a11yLabel": {
+    "description": "If `a11y` = `true`, is used as [aria-label](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-label) accessibility parameter",
+    "type": "string"
+  },
+
+  "tabIndex": {
+    "description": "Regular [tabIndex a11y parameter](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex). If `a11y` = `true`, this parameter is passed as `tabIndex` prop to the component (if not set, its value will be `0`). If `a11y` = `false`, it is set to `-1` (so the component is not focusable through `tab` key`)",
+    "type": "number | string"
+  }
+}

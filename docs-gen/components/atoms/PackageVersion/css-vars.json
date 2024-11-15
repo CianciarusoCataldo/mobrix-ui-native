@@ -1,0 +1,23 @@
+{
+  "--mbx-packageversion-text": {
+    "description": "Fallback value for `mbx-packageversion-text-light` and `mbx-packageversion-text-dark`"
+  },
+  "--mbx-packageversion-text-light": {
+    "description": "PackageVersion text color when [dark mode](https://cianciarusocataldo.github.io/mobrix-ui/docs/shared/props/#dark) is `off`",
+    "defaultExternal": {
+      "type": "atoms",
+      "component": "Label",
+      "prop": "--mbx-label-text-light"
+    },
+    "fallback": "--mbx-packageversion-text"
+  },
+  "--mbx-packageversion-text-dark": {
+    "description": "PackageVersion text color when [dark mode](https://cianciarusocataldo.github.io/mobrix-ui/docs/shared/props/#dark) is `on`",
+    "defaultExternal": {
+      "type": "atoms",
+      "component": "Label",
+      "prop": "--mbx-label-text-dark"
+    },
+    "fallback": "--mbx-packageversion-text"
+  }
+}

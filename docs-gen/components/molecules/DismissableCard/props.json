@@ -1,0 +1,90 @@
+{
+  "onClose": {
+    "description": "Callback triggered when the X icon is clicked",
+    "default": "() => {}",
+    "type": "() => void"
+  },
+  "alwaysVisible": {
+    "description": "If `true`, the DismissableCard won't disappear if the X icon is clicked (can be hidden with `hide` shared prop)",
+    "default": "false",
+    "type": "boolean"
+  },
+  "header": {
+    "description": "Card header content - extended from [Card component](../../molecules/Card/props.md#header)",
+    "typeComment": "JSX.Element | string",
+    "type": "JSX.Element | string",
+    "comment": "Card header content - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "body": {
+    "description": "Card body content - extended from [Card component](../../molecules/Card/props.md#body)",
+    "typeComment": "JSX.Element | string",
+    "type": "JSX.Element | string",
+    "comment": "Card body content - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "footer": {
+    "description": "Card footer content - extended from [Card component](../../molecules/Card/props.md#footer)",
+    "typeComment": "JSX.Element | string",
+    "type": "JSX.Element | string",
+    "comment": "Card footer content - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "noDivider": {
+    "description": "If `true`, hide all dividers - extended from [Card component](../../molecules/Card/props.md#noDivider)",
+    "type": "boolean",
+    "default": false,
+    "comment": "If `true`, hide all dividers - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "noTopDivider": {
+    "description": "If `true`, hide the top divider, between header and body - extended from [Card component](../../molecules/Card/props.md#noTopDivider)",
+    "type": "boolean",
+    "default": false,
+    "comment": "If `true`, hide the top divider, between header and body - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "noBottomDivider": {
+    "description": "If `true`, hide the top divider, between body and footer - extended from [Card component](../../molecules/Card/props.md#noBottomDivider)",
+    "type": "boolean",
+    "default": false,
+    "comment": "If `true`, hide the top divider, between body and footer - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "children": {
+    "type": "`JSX.Element` | `string`",
+    "default": "",
+    "description": "Card content - extended from [Card component](../../molecules/Card/props.md#children)",
+    "comment": "Card content - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "headerClassName": {
+    "description": "Custom classname applied on the Card header - extended from [Card component](../../molecules/Card/props.md#headerClassName)",
+    "type": "string",
+    "comment": "Custom classname applied on the Card header - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "bodyClassName": {
+    "description": "Custom classname applied on the Card body - extended from [Card component](../../molecules/Card/props.md#bodyClassName)",
+    "type": "string",
+    "comment": "Custom classname applied on the Card body - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "footerClassName": {
+    "description": "Custom classname applied on the Card footer - extended from [Card component](../../molecules/Card/props.md#footerClassName)",
+    "type": "string",
+    "comment": "Custom classname applied on the Card footer - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "headerProps": {
+    "description": "Custom props applied on the Card header - extended from [Card component](../../molecules/Card/props.md#headerProps)",
+    "type": "Record<string, any>",
+    "comment": "Custom props applied on the Card header - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "bodyProps": {
+    "description": "Custom props applied on the Card body - extended from [Card component](../../molecules/Card/props.md#bodyProps)",
+    "type": "Record<string, any>",
+    "comment": "Custom props applied on the Card body - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "footerProps": {
+    "description": "Custom props applied on the Card footer - extended from [Card component](../../molecules/Card/props.md#footerProps)",
+    "type": "Record<string, any>",
+    "comment": "Custom props applied on the Card footer - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  },
+  "dividerSize": {
+    "description": "Set the size of the top and the bottom divider - extended from [Card component](../../molecules/Card/props.md#dividerSize)",
+    "default": "1px",
+    "type": "string",
+    "comment": "Set the size of the top and the bottom divider - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/molecules/Card Card}"
+  }
+}

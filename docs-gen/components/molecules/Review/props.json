@@ -1,0 +1,50 @@
+{
+  "user": {
+    "type": "string",
+    "description": "Username displayed above the review description, at the right of the icon"
+  },
+  "description": {
+    "type": "string",
+    "description": "Review description displayed below the review username, at the top of the rate"
+  },
+  "icon": {
+    "type": "JSX.Element",
+    "description": "Icon displayed inside the component"
+  },
+  "url": {
+    "type": "string",
+    "description": "Review external url. If set, an icon will be displayed at the top right of the review"
+  },
+  "logo": {
+    "type": "JSX.Element | string",
+    "description": "Top icon, displayed at the top right of the container. If not provided, a default icon is displayed (if an url is provided too)"
+  },
+  "max": {
+    "default": "5",
+    "description": "max vote (max number of icons displayed) - extended from [Rater component](../../atoms/Rater/props.md#max)",
+    "type": "number",
+    "comment": "max vote (max number of icons displayed) - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Rater Rater}"
+  },
+  "vertical": {
+    "default": "false",
+    "description": "if `true`, rate icons will be displayed vertically - extended from [Rater component](../../atoms/Rater/props.md#vertical)",
+    "type": "boolean",
+    "comment": "if `true`, rate icons will be displayed vertically - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Rater Rater}"
+  },
+  "rate": {
+    "default": "0",
+    "description": "actual vote - extended from [Rater component](../../atoms/Rater/props.md#rate)",
+    "type": "number",
+    "comment": "actual vote - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Rater Rater}"
+  },
+  "emptyIcon": {
+    "description": "Empty rate icon, used to render the rate value. If not set, a standard unfilled star icon is used - extended from [Rater component](../../atoms/Rater/props.md#emptyIcon)",
+    "type": "JSX.Element",
+    "comment": "Empty rate icon, used to render the rate value. If not set, a standard unfilled star icon is used - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Rater Rater}"
+  },
+  "fullIcon": {
+    "description": "Full rate icon, used to render the rate value. If not set, a standard filled star icon is used - extended from [Rater component](../../atoms/Rater/props.md#fullIcon)",
+    "type": "JSX.Element",
+    "comment": "Full rate icon, used to render the rate value. If not set, a standard filled star icon is used - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Rater Rater}"
+  }
+}

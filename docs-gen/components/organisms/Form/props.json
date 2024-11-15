@@ -1,0 +1,29 @@
+{
+  "title": { "type": "string", "description": "Form title" },
+  "fields": {
+    "type": "Record<string, { header?:string; type: ``}>",
+    "description": "Form fields object. Every key is the field unique ID, and will be used on submit when returning their values",
+    "default": "{}"
+  },
+  "submitContent": {
+    "type": "`string` | `JSX.Element`",
+    "description": "Custom submit button content"
+  },
+  "fieldClassName": {
+    "type": "string",
+    "description": "Custom classname applied on every field"
+  },
+  "children": {
+    "type": "JSX.Element",
+    "default": "",
+    "description": "Form content"
+  },
+  "validate": {
+    "type": "(fieldValues: Record<string, any>) => Record<string, boolean>",
+    "description": "Custom validation callback. Must return an object with every field associated with a boolean value (if `false`, the field will be in error state)"
+  },
+  "onSubmit": {
+    "type": "(fieldValues: Record<string, any>) => void",
+    "description": "Custom callback, called on submit"
+  }
+}

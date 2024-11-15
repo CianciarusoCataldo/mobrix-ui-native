@@ -1,0 +1,16 @@
+{
+  "value": {
+    "type": "string",
+    "description": "code to display - multiline string is supported"
+  },
+  "environment": {
+    "type": "'javascript' | 'python' | 'terminal' | 'common'",
+    "description": "environment for text highlight feature, default to 'terminal' (only enabled when 'highlight' is true)",
+    "default": "'terminal'"
+  },
+  "copyButton": {
+    "description": "Enable/disable the copy button",
+    "type": "boolean",
+    "default": "true"
+  }
+}

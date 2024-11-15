@@ -1,0 +1,9 @@
+{
+  "since": "3.0.0",
+  "description": "An empty button, without additional styles, to make an icon clickable",
+  "see": [],
+  "examples": [],
+  "extend": {
+    "component": { "name": "Button" }
+  }
+}

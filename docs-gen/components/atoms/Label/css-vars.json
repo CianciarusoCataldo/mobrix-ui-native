@@ -1,0 +1,15 @@
+{
+  "--mbx-label-text": {
+    "description": "Fallback value for `mbx-label-text-light` and `mbx-label-text-dark`"
+  },
+  "--mbx-label-text-light": {
+    "description": "Label text color when [dark mode](https://cianciarusocataldo.github.io/mobrix-ui/docs/shared/props/#dark) is `off`",
+    "defaultGlobal": "--mbx-text-light",
+    "fallback": "--mbx-label-text"
+  },
+  "--mbx-label-text-dark": {
+    "description": "Label text color when [dark mode](https://cianciarusocataldo.github.io/mobrix-ui/docs/shared/props/#dark) is `on`",
+    "defaultGlobal": "--mbx-text-dark",
+    "fallback": "--mbx-label-text"
+  }
+}

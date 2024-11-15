@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "turn-me-in-apple",
+    "slug": "turn-me-in-apple",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "entryPoint": "./index.js",
+    "platforms": ["ios", "android", "web"],
+    "icon": "./assets/images/icon.png",
+    "scheme": "turnmeinapple",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.thesunnyside.turnmeinapple"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png"
+      },
+      "package": "com.thesunnyside.turnmeinapple"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

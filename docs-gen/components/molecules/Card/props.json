@@ -1,0 +1,66 @@
+{
+  "header": {
+    "description": "Card header content",
+    "typeComment": "JSX.Element | string",
+    "type": "JSX.Element | string"
+  },
+  "body": {
+    "description": "Card body content",
+    "typeComment": "JSX.Element | string",
+    "type": "JSX.Element | string"
+  },
+  "footer": {
+    "description": "Card footer content",
+    "typeComment": "JSX.Element | string",
+    "type": "JSX.Element | string"
+  },
+  "headerClassName": {
+    "description": "Custom classname applied on the Card header",
+    "type": "string"
+  },
+  "bodyClassName": {
+    "description": "Custom classname applied on the Card body",
+    "type": "string"
+  },
+  "footerClassName": {
+    "description": "Custom classname applied on the Card footer",
+    "type": "string"
+  },
+  "headerProps": {
+    "description": "Custom props applied on the Card header",
+    "type": "Record<string, any>"
+  },
+  "bodyProps": {
+    "description": "Custom props applied on the Card body",
+    "type": "Record<string, any>"
+  },
+  "footerProps": {
+    "description": "Custom props applied on the Card footer",
+    "type": "Record<string, any>"
+  },
+  "noDivider": {
+    "description": "If `true`, hide all dividers",
+    "type": "boolean",
+    "default": false
+  },
+  "noTopDivider": {
+    "description": "If `true`, hide the top divider, between header and body",
+    "type": "boolean",
+    "default": false
+  },
+  "noBottomDivider": {
+    "description": "If `true`, hide the top divider, between body and footer",
+    "type": "boolean",
+    "default": false
+  },
+  "dividerSize": {
+    "description": "Set the size of the top and the bottom divider",
+    "default": "1px",
+    "type": "string"
+  },
+  "children": {
+    "type": "`JSX.Element` | `string`",
+    "default": "",
+    "description": "Card content"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "elements": {
+    "typeComment": "(JSX.Element | string)[]",
+    "type": "(JSX.Element | string)[]",
+    "description": "Carousel elements",
+    "default": "[]"
+  },
+  "onChange": {
+    "type": "(newValue: number) => void",
+    "default": "() => {}",
+    "description": "Callback triggered when Carousel component input value is changed by the user"
+  },
+  "value": {
+    "type": "number",
+    "description": "Initial element to show (as index)",
+    "default": "0"
+  },
+  "arrowClassName": {
+    "type": "string",
+    "description": "Custom classname applied on the Carousel arrows"
+  },
+  "dotClassName": {
+    "type": "string",
+    "description": "Custom classname applied on every Carousel dot"
+  }
+}
