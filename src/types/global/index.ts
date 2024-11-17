@@ -2,17 +2,14 @@
 export {
   BuilderComponent,
   BuilderPropsReactive,
-  BuilderProps,
   ClickableComponent,
   ClosableComponent,
-  MbxSharedProps,
   ComponentWithCallback,
   ComponentWithChildren,
   ComponentWithIcon,
   ComponentWithValue,
   DeepPartial,
   GenericInputComponent,
-  MobBrixAnimation,
   MbxUiProps,
   MbxUiComponent,
   MbxUiReactiveComponent,
@@ -20,6 +17,12 @@ export {
   MbxIconProps,
   MbxIcon,
   NumericInputComponent,
-  Wrappers,
-  Features,
 } from "./global";
+
+export {
+  BuilderComponentProps,
+  BuilderProps,
+  MbxSharedProps,
+  MobBrixAnimation,
+  Wrappers,
+} from "./new";

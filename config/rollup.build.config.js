@@ -1,8 +1,6 @@
 const typescript = require("rollup-plugin-typescript2");
 const del = require("rollup-plugin-delete");
-const postcss = require("rollup-plugin-postcss");
 const terser = require("@rollup/plugin-terser");
-const postcssImport = require("postcss-import");
 
 const pkg = require("../package.json");
 
@@ -18,15 +16,6 @@ module.exports = [
       },
       {
         file: "playground/src/mobrix-ui-native-preview/index.mjs",
-        format: "esm",
-      },
-      {
-        file: "test-app/src/mobrix-ui-native-preview/index.cjs",
-        format: "cjs",
-        plugins: [terser()],
-      },
-      {
-        file: "test-app/src/mobrix-ui-native-preview/index.mjs",
         format: "esm",
       },
       {

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "turn-me-in-apple",
+    "name": "mbx-ui-native-playground-app",
     "slug": "turn-me-in-apple",
     "version": "0.1.0",
     "orientation": "portrait",
@@ -9,11 +9,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "turnmeinapple",
     "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.thesunnyside.turnmeinapple"

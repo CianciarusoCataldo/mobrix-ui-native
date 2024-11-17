@@ -42,7 +42,7 @@ const Button: ButtonComponent = ({
   onMouseEnter,
   onMouseLeave,
   ...props
-}) => { 
+}) => {
   return buildMbxStandard(props, (mbxProps) => ({
     name: "button",
     Component: children,
@@ -50,9 +50,12 @@ const Button: ButtonComponent = ({
     styles: buttonStyles,
     mbxProps,
     animate: "scale",
-    onPress: () => {
-      onClick();
-    },
+    parseProps: ({ animations: { startScale } }) => ({
+      onPress: () => {
+        startScale();
+        onClick();
+      },
+    }),
   }));
 };
 

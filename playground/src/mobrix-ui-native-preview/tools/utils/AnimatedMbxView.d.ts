@@ -1,13 +1,11 @@
 import React from "react";
-declare const AnimatedMbxView: ({ internalOnPress, Children, settings, }: {
-    internalOnPress: () => void;
+import { BuilderComponentProps } from "../../types/global";
+declare const AnimatedMbxView: ({ Children, settings, }: {
     settings: {
         fadeIn?: boolean;
         scale?: boolean;
         pressable?: boolean;
     };
-    Children: ({ internalOnPress, }: {
-        internalOnPress?: () => void;
-    }) => JSX.Element;
+    Children: ({ animations }: BuilderComponentProps) => JSX.Element;
 }) => React.JSX.Element;
 export default AnimatedMbxView;

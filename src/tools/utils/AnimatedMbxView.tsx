@@ -1,22 +1,17 @@
 import React, { useEffect, useRef } from "react";
-import { Animated } from "react-native";
+import { Animated, StyleSheet } from "react-native";
+import { BuilderComponentProps } from "../../types/global";
 
 const AnimatedMbxView = ({
-  internalOnPress,
   Children,
   settings,
 }: {
-  internalOnPress: () => void;
   settings: {
     fadeIn?: boolean;
     scale?: boolean;
     pressable?: boolean;
   };
-  Children: ({
-    internalOnPress,
-  }: {
-    internalOnPress?: () => void;
-  }) => JSX.Element;
+  Children: ({ animations }: BuilderComponentProps) => JSX.Element;
 }) => {
   const scale = useRef(new Animated.Value(1)).current;
   const opacity = useRef(new Animated.Value(0)).current;
@@ -44,19 +39,15 @@ const AnimatedMbxView = ({
     ]).start();
   };
 
-  const onPress = () => {
-    startAnimation();
-    internalOnPress();
-  };
-
+  const styles = StyleSheet.create({
+    main: {
+      ...{ ...(settings.scale && { transform: [{ scale }] }) },
+      ...{ ...(settings.fadeIn && { opacity }) },
+    },
+  });
   return (
-    <Animated.View
-      style={{
-        ...{ ...(settings.scale && { transform: [{ scale }] }) },
-        ...{ ...(settings.fadeIn && { opacity }) },
-      }}
-    >
-      <Children internalOnPress={onPress} />
+    <Animated.View style={styles.main}>
+      <Children animations={{ startScale: startAnimation }} />
     </Animated.View>
   );
 };

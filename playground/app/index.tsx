@@ -18,6 +18,7 @@ const Home = () => {
 
   const [dark, setDark] = useState(false);
   const [shadow, setShadow] = useState(false);
+  const [animated, setAnimated] = useState(true);
 
   return (
     <View style={styles.container}>
@@ -27,6 +28,7 @@ const Home = () => {
         }}
         dark={dark}
         shadow={shadow}
+        animated={animated}
       >
         Switch dark
       </Button>
@@ -35,10 +37,22 @@ const Home = () => {
         onClick={() => {
           setShadow(!shadow);
         }}
-        dark={!dark}
+        dark={dark}
         shadow={shadow}
+        animated={animated}
       >
         Switch shadow
+      </Button>
+      <Button
+        animation="fade-in"
+        onClick={() => {
+          setAnimated(!animated);
+        }}
+        dark={dark}
+        shadow={shadow}
+        animated={animated}
+      >
+        Switch animated
       </Button>
     </View>
   );

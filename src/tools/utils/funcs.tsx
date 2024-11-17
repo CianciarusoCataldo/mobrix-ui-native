@@ -1,61 +1,21 @@
 // import "../styles/core/index.css";
 
-import React, { useEffect, useRef } from "react";
-import {
-  Button,
-  Pressable,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-  Animated,
-} from "react-native";
+import React from "react";
+import { StyleSheet, Text } from "react-native";
+
 import {
   BuilderProps,
   BuilderPropsReactive,
   MbxSharedProps,
-  Wrappers,
 } from "../../types/global";
 
-import { D_PROPS, properties } from "./constants";
+import { extractStyles, parseProps } from "./utils";
+import { nativeWrappers, properties } from "./constants";
 import { getTheme } from "../styles/core/theme";
-import { Theme } from "../../types/global/global";
 import AnimatedMbxView from "./AnimatedMbxView";
+import { BuilderComponentProps } from "../../types/global";
 
-const wrappers: Record<Wrappers, any> = {
-  Button,
-  TouchableOpacity,
-  Pressable,
-  Text,
-  View,
-};
-
-export const extractStyles = (
-  { dark: darkTheme = {}, light = {}, common = {} }: Theme,
-  dark: boolean
-) => (dark ? { ...common, ...darkTheme } : { ...common, ...light });
-
-export const parseProps = (props: MbxSharedProps): MbxSharedProps => ({
-  ...D_PROPS,
-  ...props,
-  ...(props.unstyled && {
-    shadow: false,
-    background: false,
-    animated: false,
-    hover: false,
-  }),
-  ...(props.disabled && {
-    animated: false,
-    hover: false,
-    a11y: false,
-    active: false,
-  }),
-  ...(!props.animated && {
-    animation: undefined,
-  }),
-});
-
-const getMbxUiStandard = ({
+export const buildMbxStandardComponent = ({
   name,
   Component,
   /* istanbul ignore next */
@@ -64,35 +24,8 @@ const getMbxUiStandard = ({
   styles = [],
   addProps = {},
   animate = "none",
-  onPress: pressCallback = () => {},
+  parseProps = () => ({}),
 }: BuilderProps) => {
-  const Wrapper = wrapper;
-  const props: MbxSharedProps & Record<string, any> = {
-    ...cprops.props,
-    ...addProps,
-  };
-  const scale = useRef(new Animated.Value(1)).current;
-  const settings = properties[wrapper];
-
-  const startAnimation = () => {
-    Animated.sequence([
-      Animated.timing(scale, {
-        toValue: 0.95,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scale, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
-
-  const onPress = () => {
-    startAnimation();
-    pressCallback();
-  };
   const theme = getTheme();
   const baseTheme = extractStyles(theme.main, cprops.dark);
   const activeTheme = extractStyles(theme[name], cprops.dark);
@@ -102,64 +35,67 @@ const getMbxUiStandard = ({
     extra: styles,
     custom: cprops.style,
     base: baseTheme,
-    shadow: cprops.shadow ? extractStyles(theme.shadow, cprops.shadow) : {},
+    shadow: cprops.shadow ? extractStyles(theme.shadow, cprops.dark) : {},
     text: {
       color: activeTheme?.color || baseTheme.color,
     },
   });
 
-  const NativeWrapper = wrappers[Wrapper];
+  const settings = properties[wrapper];
 
-  const FinalComponent = ({
-    internalOnPress = () => {},
-  }: {
-    internalOnPress?: () => void;
-  }) => (
-    <NativeWrapper
-      // @ts-ignore
-      {...props}
-      {...(Component && {
-        children:
-          typeof Component === "string" ? (
-            <Text style={standardStyles.text}>{Component}</Text>
-          ) : (
-            Component
-          ),
-      })}
-      style={[
-        standardStyles.base,
-        standardStyles.shadow,
-        standardStyles.main,
-        standardStyles.extra,
-        standardStyles.custom,
-      ]}
-      key={cprops.key}
-      {...(settings.pressable && {
-        onPress: () => {
-          internalOnPress();
-          onPress();
-        },
-        activeOpacity: 0.8,
-      })}
-    />
-  );
+  const NativeWrapper = nativeWrappers[wrapper];
 
-  return cprops.animated ? (
+  const Children = (childrenprops: BuilderComponentProps) => {
+    const parsedProps = parseProps(childrenprops);
+    const props: MbxSharedProps & Record<string, any> = {
+      ...cprops.props,
+      ...addProps,
+      ...parsedProps,
+    };
+
+    return (
+      <NativeWrapper
+        // @ts-ignore
+        {...props}
+        {...(Component && {
+          children:
+            typeof Component === "string" ? (
+              <Text style={standardStyles.text}>{Component}</Text>
+            ) : (
+              Component
+            ),
+        })}
+        style={[
+          standardStyles.base,
+          standardStyles.shadow,
+          standardStyles.main,
+          standardStyles.extra,
+          standardStyles.custom,
+        ]}
+        key={cprops.key}
+        {...(settings.pressable &&
+          cprops.animated && {
+            activeOpacity: 0.8,
+          })}
+      />
+    );
+  };
+
+  return (
     <AnimatedMbxView
-      settings={{
-        fadeIn: cprops.animation === "fade-in",
-        scale: animate === "scale",
-      }}
-      internalOnPress={onPress}
-      Children={FinalComponent}
+      settings={
+        cprops.animated && {
+          fadeIn: cprops.animation === "fade-in",
+          scale: animate === "scale",
+        }
+      }
+      Children={Children}
     />
-  ) : (
-    <FinalComponent />
   );
 };
 
 // prettier-ignore
-const getMbxUiReactive = <T=any>({
+export const getMbxUiReactive = <T=any>({
   defV,
   inpV,
   props,
@@ -181,7 +117,7 @@ const getMbxUiReactive = <T=any>({
     }
   }, [JSON.stringify(inpV)]);
 
-  return getMbxUiStandard({
+  return buildMbxStandardComponent({
     Component: Component && Component({ value, setValue }),
     ...bprops,
     ...parsed,
@@ -205,7 +141,7 @@ export const buildMbxStandard = (
   /* istanbul ignore next */
   props: Record<string, any>,
   callback: (props: MbxSharedProps) => BuilderProps
-) => getMbxUiStandard(parse(props, callback));
+) => buildMbxStandardComponent(parse(props, callback));
 
 // prettier-ignore
 export const buildMbxReactive = <T=any>(

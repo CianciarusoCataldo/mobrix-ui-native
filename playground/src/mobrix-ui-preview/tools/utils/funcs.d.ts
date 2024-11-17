@@ -1,9 +1,6 @@
 import React from "react";
 import { BuilderProps, BuilderPropsReactive, MbxSharedProps } from "../../types/global";
-import { Theme } from "../../types/global/global";
-export declare const extractStyles: ({ dark: darkTheme, light, common }: Theme, dark: boolean) => {
-    [x: string]: any;
-};
-export declare const parseProps: (props: MbxSharedProps) => MbxSharedProps;
+export declare const buildMbxStandardComponent: ({ name, Component, mbxProps: cprops, wrapper, styles, addProps, animate, parseProps, }: BuilderProps) => React.JSX.Element;
+export declare const getMbxUiReactive: <T = any>({ defV, inpV, props, Component, ...bprops }: BuilderPropsReactive<T>) => React.JSX.Element;
 export declare const buildMbxStandard: (props: Record<string, any>, callback: (props: MbxSharedProps) => BuilderProps) => React.JSX.Element;
 export declare const buildMbxReactive: <T = any>(props: Record<string, any>, callback: (props: MbxSharedProps) => BuilderPropsReactive<T>) => React.JSX.Element;

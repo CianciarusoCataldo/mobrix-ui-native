@@ -1,31 +1,23 @@
 import { MbxSharedProps, Wrappers } from "../../types";
+import {
+  Button,
+  Pressable,
+  TouchableOpacity,
+  View,
+  Text,
+} from "react-native";
 
 export const D_PROPS: MbxSharedProps = {
   background: true,
-  hover: true,
   disabled: false,
   dark: false,
   animated: true,
   shadow: true,
   props: {},
-  a11y: true,
   unstyled: false,
-  features: {},
   active: false,
   style: [],
 };
-
-export const restricted = [
-  "dk",
-  "cfc",
-  "hv",
-  "wbc",
-  "wb",
-  "wc",
-  "wch",
-  "wall",
-  "wallc",
-];
 
 export const properties: Record<
   Wrappers,
@@ -38,4 +30,12 @@ export const properties: Record<
   TouchableOpacity: { pressable: true },
   View: { pressable: false },
   Button: { pressable: true },
+};
+
+export const nativeWrappers: Record<Wrappers, any> = {
+  Button,
+  TouchableOpacity,
+  Pressable,
+  Text,
+  View,
 };

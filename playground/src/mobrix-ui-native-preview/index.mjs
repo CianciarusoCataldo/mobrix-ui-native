@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Animated, StyleSheet, Text, Button as Button$1, TouchableOpacity, Pressable, View } from 'react-native';
+import { Button as Button$1, TouchableOpacity, Pressable, Text, View, Animated, StyleSheet } from 'react-native';
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -48,15 +48,12 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
 
 var D_PROPS = {
     background: true,
-    hover: true,
     disabled: false,
     dark: false,
     animated: true,
     shadow: true,
     props: {},
-    a11y: true,
     unstyled: false,
-    features: {},
     active: false,
     style: [],
 };
@@ -67,6 +64,31 @@ var properties = {
     View: { pressable: false },
     Button: { pressable: true },
 };
+var nativeWrappers = {
+    Button: Button$1,
+    TouchableOpacity: TouchableOpacity,
+    Pressable: Pressable,
+    Text: Text,
+    View: View,
+};
+
+var extractStyles = function (_a, dark) {
+    var _b = _a.dark, darkTheme = _b === void 0 ? {} : _b, _c = _a.light, light = _c === void 0 ? {} : _c, _d = _a.common, common = _d === void 0 ? {} : _d;
+    return (dark ? __assign(__assign({}, common), darkTheme) : __assign(__assign({}, common), light));
+};
+var parseProps = function (props) { return (__assign(__assign(__assign(__assign(__assign({}, D_PROPS), props), (props.unstyled && {
+    shadow: false,
+    background: false,
+    animated: false,
+    hover: false,
+})), (props.disabled && {
+    animated: false,
+    hover: false,
+    a11y: false,
+    active: false,
+})), (!props.animated && {
+    animation: undefined,
+}))); };
 
 var theme = {
     main: {
@@ -105,7 +127,7 @@ var setComponentTheme = function (component, newTheme) {
 var getTheme = function () { return theme; };
 
 var AnimatedMbxView = function (_a) {
-    var internalOnPress = _a.internalOnPress, Children = _a.Children, settings = _a.settings;
+    var Children = _a.Children, settings = _a.settings;
     var scale = useRef(new Animated.Value(1)).current;
     var opacity = useRef(new Animated.Value(0)).current;
     useEffect(function () {
@@ -129,67 +151,20 @@ var AnimatedMbxView = function (_a) {
             }),
         ]).start();
     };
-    var onPress = function () {
-        startAnimation();
-        internalOnPress();
-    };
-    return (React.createElement(Animated.View, { style: __assign(__assign({}, __assign({}, (settings.scale && { transform: [{ scale: scale }] }))), __assign({}, (settings.fadeIn && { opacity: opacity }))) },
-        React.createElement(Children, { internalOnPress: onPress })));
+    var styles = StyleSheet.create({
+        main: __assign(__assign({}, __assign({}, (settings.scale && { transform: [{ scale: scale }] }))), __assign({}, (settings.fadeIn && { opacity: opacity }))),
+    });
+    return (React.createElement(Animated.View, { style: styles.main },
+        React.createElement(Children, { animations: { startScale: startAnimation } })));
 };
 
 // import "../styles/core/index.css";
-var wrappers = {
-    Button: Button$1,
-    TouchableOpacity: TouchableOpacity,
-    Pressable: Pressable,
-    Text: Text,
-    View: View,
-};
-var extractStyles = function (_a, dark) {
-    var _b = _a.dark, darkTheme = _b === void 0 ? {} : _b, _c = _a.light, light = _c === void 0 ? {} : _c, _d = _a.common, common = _d === void 0 ? {} : _d;
-    return (dark ? __assign(__assign({}, common), darkTheme) : __assign(__assign({}, common), light));
-};
-var parseProps = function (props) { return (__assign(__assign(__assign(__assign(__assign({}, D_PROPS), props), (props.unstyled && {
-    shadow: false,
-    background: false,
-    animated: false,
-    hover: false,
-})), (props.disabled && {
-    animated: false,
-    hover: false,
-    a11y: false,
-    active: false,
-})), (!props.animated && {
-    animation: undefined,
-}))); };
-var getMbxUiStandard = function (_a) {
+var buildMbxStandardComponent = function (_a) {
     var name = _a.name, Component = _a.Component, 
     /* istanbul ignore next */
     _b = _a.mbxProps, 
     /* istanbul ignore next */
-    cprops = _b === void 0 ? {} : _b, _c = _a.wrapper, wrapper = _c === void 0 ? "View" : _c, _d = _a.styles, styles = _d === void 0 ? [] : _d, _e = _a.addProps, addProps = _e === void 0 ? {} : _e, _f = _a.animate, animate = _f === void 0 ? "none" : _f, _g = _a.onPress, pressCallback = _g === void 0 ? function () { } : _g;
-    var Wrapper = wrapper;
-    var props = __assign(__assign({}, cprops.props), addProps);
-    var scale = useRef(new Animated.Value(1)).current;
-    var settings = properties[wrapper];
-    var startAnimation = function () {
-        Animated.sequence([
-            Animated.timing(scale, {
-                toValue: 0.95,
-                duration: 100,
-                useNativeDriver: true,
-            }),
-            Animated.timing(scale, {
-                toValue: 1,
-                duration: 100,
-                useNativeDriver: true,
-            }),
-        ]).start();
-    };
-    var onPress = function () {
-        startAnimation();
-        pressCallback();
-    };
+    cprops = _b === void 0 ? {} : _b, _c = _a.wrapper, wrapper = _c === void 0 ? "View" : _c, _d = _a.styles, styles = _d === void 0 ? [] : _d, _e = _a.addProps, addProps = _e === void 0 ? {} : _e, _f = _a.animate, animate = _f === void 0 ? "none" : _f, _g = _a.parseProps, parseProps = _g === void 0 ? function () { return ({}); } : _g;
     var theme = getTheme();
     var baseTheme = extractStyles(theme.main, cprops.dark);
     var activeTheme = extractStyles(theme[name], cprops.dark);
@@ -198,14 +173,16 @@ var getMbxUiStandard = function (_a) {
         extra: styles,
         custom: cprops.style,
         base: baseTheme,
-        shadow: cprops.shadow ? extractStyles(theme.shadow, cprops.shadow) : {},
+        shadow: cprops.shadow ? extractStyles(theme.shadow, cprops.dark) : {},
         text: {
             color: (activeTheme === null || activeTheme === void 0 ? void 0 : activeTheme.color) || baseTheme.color,
         },
     });
-    var NativeWrapper = wrappers[Wrapper];
-    var FinalComponent = function (_a) {
-        var _b = _a.internalOnPress, internalOnPress = _b === void 0 ? function () { } : _b;
+    var settings = properties[wrapper];
+    var NativeWrapper = nativeWrappers[wrapper];
+    var Children = function (childrenprops) {
+        var parsedProps = parseProps(childrenprops);
+        var props = __assign(__assign(__assign({}, cprops.props), addProps), parsedProps);
         return (React.createElement(NativeWrapper
         // @ts-ignore
         , __assign({}, props, (Component && {
@@ -216,18 +193,15 @@ var getMbxUiStandard = function (_a) {
                 standardStyles.main,
                 standardStyles.extra,
                 standardStyles.custom,
-            ], key: cprops.key }, (settings.pressable && {
-            onPress: function () {
-                internalOnPress();
-                onPress();
-            },
+            ], key: cprops.key }, (settings.pressable &&
+            cprops.animated && {
             activeOpacity: 0.8,
         }))));
     };
-    return cprops.animated ? (React.createElement(AnimatedMbxView, { settings: {
+    return (React.createElement(AnimatedMbxView, { settings: cprops.animated && {
             fadeIn: cprops.animation === "fade-in",
             scale: animate === "scale",
-        }, internalOnPress: onPress, Children: FinalComponent })) : (React.createElement(FinalComponent, null));
+        }, Children: Children }));
 };
 var parse = function (
 /* istanbul ignore next */
@@ -238,7 +212,7 @@ props, callback) {
 };
 var buildMbxStandard = function (
 /* istanbul ignore next */
-props, callback) { return getMbxUiStandard(parse(props, callback)); };
+props, callback) { return buildMbxStandardComponent(parse(props, callback)); };
 
 /**
  * A tiny and smart button component.
@@ -283,8 +257,14 @@ var Button = function (_a) {
         styles: buttonStyles,
         mbxProps: mbxProps,
         animate: "scale",
-        onPress: function () {
-            onClick();
+        parseProps: function (_a) {
+            var startScale = _a.animations.startScale;
+            return ({
+                onPress: function () {
+                    startScale();
+                    onClick();
+                },
+            });
         },
     }); });
 };

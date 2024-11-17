@@ -1,2 +1,3 @@
 /** Shared types */
-export { BuilderComponent, BuilderPropsReactive, BuilderProps, ClickableComponent, ClosableComponent, MbxSharedProps, ComponentWithCallback, ComponentWithChildren, ComponentWithIcon, ComponentWithValue, DeepPartial, GenericInputComponent, MobBrixAnimation, MbxUiProps, MbxUiComponent, MbxUiReactiveComponent, MbxUiReactiveComponentBuilder, MbxIconProps, MbxIcon, NumericInputComponent, Wrappers, Features, } from "./global";
+export { BuilderComponent, BuilderPropsReactive, ClickableComponent, ClosableComponent, ComponentWithCallback, ComponentWithChildren, ComponentWithIcon, ComponentWithValue, DeepPartial, GenericInputComponent, MbxUiProps, MbxUiComponent, MbxUiReactiveComponent, MbxUiReactiveComponentBuilder, MbxIconProps, MbxIcon, NumericInputComponent, } from "./global";
+export { BuilderComponentProps, BuilderProps, MbxSharedProps, MobBrixAnimation, Wrappers, } from "./new";
