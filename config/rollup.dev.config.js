@@ -2,8 +2,6 @@ const typescript = require("rollup-plugin-typescript2");
 // const del = require("rollup-plugin-delete");
 const terser = require("@rollup/plugin-terser");
 const copy = require("rollup-plugin-copy");
-const path = require("path");
-const alias = require("@rollup/plugin-alias");
 const pkg = require("../package.json");
 
 module.exports = [

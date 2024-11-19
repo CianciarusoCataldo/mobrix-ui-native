@@ -1,13 +1,15 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 import "@src/localization";
 
 import {
   Button,
   CheckBox,
+  CodeBox,
   MbxUiProps,
   MoBrixAnimation,
+  setComponentTheme,
 } from "../mobrix-ui-native-preview";
 
 const ToolBox = ({
@@ -45,7 +47,8 @@ const ToolBox = ({
       <View
         style={{
           display: "flex",
-          flexDirection: "row",
+          flexDirection: "column",
+          marginBottom: 20,
         }}
       >
         <Button
@@ -66,13 +69,6 @@ const ToolBox = ({
         >
           Enable/disable shadow
         </Button>
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-        }}
-      >
         <Button
           dark
           style={styles.button}
@@ -91,13 +87,6 @@ const ToolBox = ({
         >
           Enable/disable a11y
         </Button>
-      </View>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-        }}
-      >
         <Button
           dark
           style={styles.button}
@@ -135,19 +124,19 @@ const ToolBox = ({
 };
 
 export default function Home() {
-  // setComponentTheme("button", {
-  //   light: {
-  //     backgroundColor: "red",
-  //     color: "#1b1b1b",
-  //   },
-  //   dark: {
-  //     backgroundColor: "blue",
-  //     color: "#ffffff",
-  //   },
-  // });
+  setComponentTheme("check", {
+    light: {
+      backgroundColor: "red",
+      color: "#1b1b1b",
+    },
+    dark: {
+      backgroundColor: "blue",
+      color: "#ffffff",
+    },
+  });
 
   return (
-    <View style={{ width: "100%", height: "100%", overflow: "scroll" }}>
+    <ScrollView style={{ width: "100%", height: "100%", overflow: "scroll" }}>
       <ToolBox
         addProps={{
           onClick: () => {
@@ -159,7 +148,10 @@ export default function Home() {
         {Button}
       </ToolBox>
       <ToolBox>{CheckBox}</ToolBox>
-    </View>
+      <ToolBox addProps={{ value: "npm i mobrix-ui-native" }}>
+        {CodeBox}
+      </ToolBox>
+    </ScrollView>
   );
 }
 
@@ -171,9 +163,10 @@ const styles = StyleSheet.create({
   },
   main: {
     backgroundColor: "#adafaa",
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   button: {
-    margin: 10,
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",

@@ -97,8 +97,7 @@ var theme = {
     },
     shadow: {
         common: {
-            shadowOpacity: 0.7, // opacità dell'ombra
-            shadowRadius: 1, // raggio dell'ombra
+            shadowOpacity: 0.8, // opacità dell'ombra
             // Ombra per Android
             elevation: 15, // elevate per Android
         },
@@ -213,7 +212,7 @@ var getAnimatedSequence = function (value, animation) {
     }));
 };
 var AnimatedMbxView = function (_a) {
-    var Children = _a.children, animation = _a.animation;
+    var Children = _a.children, animation = _a.animation, style = _a.style;
     var initialValues = animation
         ? animationsMap[animation].initial
         : defaultAnimationValues;
@@ -252,7 +251,7 @@ var AnimatedMbxView = function (_a) {
             opacity: opacity,
         },
     });
-    return (React.createElement(Animated.View, { style: styles.main },
+    return (React.createElement(Animated.View, { style: [styles.main, style] },
         React.createElement(Children, { animate: function (anim) { return getAnimatedSequence(animations[anim], anim).start(); } })));
 };
 
@@ -402,6 +401,7 @@ var buttonStyles = {
 };
 
 var tickIcon = require("./imgs/tick.png");
+var copyIcon = require("./imgs/copy.png");
 
 /**
  * A checkbox element, totally customizable.
@@ -463,6 +463,8 @@ var Checkbox = function (_a) {
             styles: {
                 width: 35,
                 height: 35,
+                justifyContent: "center",
+                alignItems: "center",
             },
             props: function (val, setVal) { return ({
                 addProps: !mbxProps.disabled && {
@@ -479,4 +481,154 @@ var Checkbox = function (_a) {
     });
 };
 
-export { Button, Checkbox as CheckBox, setComponentTheme, setTheme };
+var cColor = ["#d81313", "#f6713c", "#3b82f6", "#2432f5", "#5b9306"];
+var C_LANGS = {
+    common: {
+        STRING: 1,
+    },
+    javascript: {
+        import: 0,
+        from: 0,
+        function: 0,
+        if: 0,
+        else: 0,
+        try: 0,
+        catch: 0,
+        while: 0,
+        export: 0,
+        default: 2,
+        const: 3,
+        for: 0,
+        forEach: 0,
+    },
+    python: {
+        pip: 4,
+        def: 4,
+        __main__: 4,
+    },
+    terminal: {
+        "#!/bin/bash": 4,
+        "#!/bin/sh": 4,
+        sh: 4,
+        npm: 4,
+        npx: 4,
+        node: 4,
+        git: 4,
+        "gh-pages": 0,
+        docker: 0,
+        ls: 0,
+        cd: 0,
+        jq: 0,
+        cat: 0,
+        curl: 0,
+        "apt-get": 0,
+        apt: 0,
+        wget: 0,
+        aws: 0,
+        cp: 0,
+        rm: 0,
+    },
+};
+
+var getCode = function (code, env) {
+    var parts = [];
+    var strCol = cColor[C_LANGS.common.STRING];
+    code.split(/(\".+?\")/g).forEach(function (codeBlock, index) {
+        if (index % 2 !== 0) {
+            parts.push({ code: codeBlock, color: strCol });
+        }
+        else {
+            codeBlock.split(/(\'.+?\')/g).forEach(function (inBlock, secIndex) {
+                if (secIndex % 2 !== 0) {
+                    parts.push({
+                        code: inBlock,
+                        color: strCol,
+                    });
+                }
+                else {
+                    inBlock.split(" ").forEach(function (part, piInd) {
+                        parts.push({
+                            code: part,
+                            color: cColor[C_LANGS[env][part]],
+                        });
+                        parts.push({
+                            code: " ",
+                        });
+                    });
+                }
+            });
+        }
+    });
+    if (parts[parts.length - 1].code === " ") {
+        parts.pop();
+    }
+    return parts;
+};
+
+var cdbComponent = function (_a) {
+    var _b = _a.value, value = _b === void 0 ? "" : _b, _c = _a.environment, environment = _c === void 0 ? "terminal" : _c, _d = _a.copyButton, copyButton = _d === void 0 ? true : _d, disabled = _a.disabled, hover = _a.hover, active = _a.active, a11y = _a.a11y;
+    var parse = value.length > 0 ? getCode : function (inp, e) { return [{ value: inp }]; };
+    return [
+        React.createElement(Button, { a11y: a11y, key: "cd_cp", onClick: function () { return value && navigator.clipboard.writeText(value); }, hide: !copyButton, disabled: disabled, hover: hover, active: active, shadow: false, style: { width: 25, height: 25, marginLeft: "auto" }, background: false },
+            React.createElement(Image, { source: copyIcon, style: { width: 25, height: 25 } })),
+        React.createElement(View, { key: "cd_cd" }, value.split("\n").map(function (codl, lIndex) { return (React.createElement(Text, { style: { margin: 0 }, key: "cd_l_".concat(lIndex) }, parse(codl, environment).map(function (cBlock, bIndex) {
+            return cBlock.code === " " ? (" ") : (React.createElement(Text, { key: "cdb_bl_".concat(bIndex), style: { color: cBlock.color || "inherit" } }, cBlock.code));
+        }))); })),
+    ];
+};
+
+/**
+ * A smart code box, to display code text as a compiler. Supports code highlight, with a selectable environment, and multiline strings
+ *
+ * @param {string} value code to display - multiline string is supported
+ * @param {'javascript' | 'python' | 'terminal' | 'common'} environment environment for text highlight feature, default to 'terminal' (only enabled when 'highlight' is true)
+ * @param {boolean} copyButton Enable/disable the copy button
+ * @param {string} key - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - React key, the standard [key parameter](https://reactjs.org/docs/lists-and-keys.html)
+ * @param {string} className - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - custom className applied on main container
+ * @param {boolean} dark - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable dark mode
+ * @param {boolean} hide - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Hide/show component
+ * @param {string} id - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - [id parameter](https://www.w3schools.com/html/html_id.asp) (for styling/testing purpose, to easily find the component into the DOM)
+ * @param {boolean} shadow - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable shadow behind component
+ * @param {CSSProperties} style - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Css inline properties applied on main container
+ * @param {boolean} unstyled - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If `true`, no standard MoBrix-ui styles will be applied on the components (useful for example, with image buttons)
+ * @param {boolean} animated - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component animations
+ * @param {'fade-in' | 'slide-in-left' | 'slide-in-right' | 'slide-in-top' | 'shake'} animation - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If `animated`=`true`, this parameter specifies which animation is used when component is rendered
+ * @param {boolean} background - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component background
+ * @param {boolean} hover - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component hover standard styles
+ * @param {boolean} active - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component click standard styles
+ * @param {boolean} disabled - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If true, disable the component. The effect may vary depending on the component type
+ * @param {(keyEvent : any) => void} onKeyDown - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom callback triggered when a key is pressed while using the component (for example, when writing text inside an `Input` component).
+ * @param {() => void} onFocus - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom callback triggered when the component get the focus (for example, through tab key)
+ * @param {() => void} onFocusLost - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom callback triggered when the component lose the focus (for example, when user clicks outside it)
+ * @param {Record<string, any>} props - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom additional properties, applied to the component
+ * @param {boolean} a11y - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable accessibility features
+ * @param {string} a11yLabel - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If `a11y` = `true`, is used as [aria-label](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-label) accessibility parameter
+ * @param {number | string} tabIndex - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Regular [tabIndex a11y parameter](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex). If `a11y` = `true`, this parameter is passed as `tabIndex` prop to the component (if not set, its value will be `0`). If `a11y` = `false`, it is set to `-1` (so the component is not focusable through `tab` key`)
+ *
+ *
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/CodeBox
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/docs
+ *
+ * @since 1.0.0
+ *
+ * @author Cataldo Cianciaruso <https://github.com/CianciarusoCataldo>
+ *
+ * @copyright 2024 Cataldo Cianciaruso
+ */
+var CodeBox = function (_a) {
+    var active = _a.active, props = __rest(_a, ["active"]);
+    return buildMbxStandard(props, function (mbxProps) { return ({
+        name: "code",
+        mbxProps: mbxProps,
+        styles: {
+            padding: 1,
+            justifyContent: "center",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+        },
+        Component: cdbComponent(__assign(__assign(__assign({}, props), mbxProps), { active: active })),
+    }); });
+};
+
+export { Button, Checkbox as CheckBox, CodeBox, setComponentTheme, setTheme };

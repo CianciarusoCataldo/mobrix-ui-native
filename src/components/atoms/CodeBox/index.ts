@@ -1,18 +1,14 @@
-import { CheckBoxComponent } from "../../../types";
+import { CodeBoxComponent } from "../../../types";
 
-import { buildMbxReactive } from "../../../tools/utils";
-import React from "react";
-import { Image } from "react-native";
-import { tickIcon } from "../../../assets";
-import { extractStyles } from "../../../tools/utils/utils";
-import { getTheme } from "../../../tools/styles/core/theme";
+import component from "./component";
+import { buildMbxStandard } from "../../../tools/utils";
 
 /**
- * A checkbox element, totally customizable.
+ * A smart code box, to display code text as a compiler. Supports code highlight, with a selectable environment, and multiline strings
  *
- * @param {boolean} value Checkbox initial value (checked / unchecked)
- * @param {JSX.Element} icon custom tick icon (if not set, the default one will be used)
- * @param {(newValue: boolean) => void} onChange Callback triggered when CheckBox component input value is changed by the user
+ * @param {string} value code to display - multiline string is supported
+ * @param {'javascript' | 'python' | 'terminal' | 'common'} environment environment for text highlight feature, default to 'terminal' (only enabled when 'highlight' is true)
+ * @param {boolean} copyButton Enable/disable the copy button
  * @param {string} key - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - React key, the standard [key parameter](https://reactjs.org/docs/lists-and-keys.html)
  * @param {string} className - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - custom className applied on main container
  * @param {boolean} dark - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable dark mode
@@ -36,7 +32,7 @@ import { getTheme } from "../../../tools/styles/core/theme";
  * @param {number | string} tabIndex - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Regular [tabIndex a11y parameter](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex). If `a11y` = `true`, this parameter is passed as `tabIndex` prop to the component (if not set, its value will be `0`). If `a11y` = `false`, it is set to `-1` (so the component is not focusable through `tab` key`)
  *
  *
- * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/CheckBox
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/CodeBox
  * @see https://cianciarusocataldo.github.io/mobrix-ui/docs
  *
  * @since 1.0.0
@@ -45,51 +41,22 @@ import { getTheme } from "../../../tools/styles/core/theme";
  *
  * @copyright 2024 Cataldo Cianciaruso
  */
-const Checkbox: CheckBoxComponent = ({
-  value,
-  onChange = () => {},
-  icon,
-  ...props
-}) =>
-  buildMbxReactive<boolean>(props, (mbxProps) => {
-    const theme = getTheme();
-    const baseStyles = extractStyles(theme.main, mbxProps.dark);
-    const styles = extractStyles(theme["check"], mbxProps.dark);
+const CodeBox: CodeBoxComponent = ({ active, ...props }) =>
+  buildMbxStandard(props, (mbxProps) => ({
+    name: "code",
+    mbxProps,
+    styles: {
+      padding: 1,
+      justifyContent: "center",
+      display: "flex",
+      flexDirection: "column",
+      overflow: "hidden",
+    },
+    Component: component({
+      ...props,
+      ...mbxProps,
+      active,
+    }),
+  }));
 
-    return {
-      name: "check",
-      wrapper: mbxProps.animated ? "TouchableOpacity" : "Pressable",
-      Component: ({ value }) =>
-        value
-          ? icon || (
-              <Image
-                source={tickIcon}
-                style={{
-                  width: 30,
-                  height: 30,
-                  tintColor: styles.color || baseStyles.color,
-                }}
-              />
-            )
-          : "",
-      styles: {
-        width: 35,
-        height: 35,
-        justifyContent: "center",
-        alignItems: "center",
-      },
-      props: (val, setVal) => ({
-        addProps: !mbxProps.disabled && {
-          onPress: () => {
-            onChange(!val);
-            setVal(!val);
-          },
-        },
-        mbxProps,
-      }),
-      inpV: value,
-      defV: false,
-    };
-  });
-
-export default Checkbox;
+export default CodeBox;

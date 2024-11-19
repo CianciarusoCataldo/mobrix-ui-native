@@ -5,6 +5,7 @@ export type MbxUiNativeAnimatedViewProps = {
         animate: BuilderComponentProps["funcs"]["animate"];
     }) => JSX.Element;
     animation?: MoBrixAnimation;
+    style?: Record<string, any>;
 };
 export type MbxAttributes = {
     /** Enable/disable dark mode (default `false`) */

@@ -160,7 +160,6 @@ export const CopyIcon: MbxIcon = (iprops) => (
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 60 60"
         version="1.0"
-        {...props}
       >
         <rect
           strokeLinejoin="round"

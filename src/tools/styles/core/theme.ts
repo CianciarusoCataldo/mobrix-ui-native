@@ -13,8 +13,7 @@ let theme: Record<"main" | "shadow" | "button" | "check", Theme> = {
   },
   shadow: {
     common: {
-      shadowOpacity: 0.7, // opacità dell'ombra
-      shadowRadius: 1, // raggio dell'ombra
+      shadowOpacity: 0.8, // opacità dell'ombra
       // Ombra per Android
       elevation: 15, // elevate per Android
     },

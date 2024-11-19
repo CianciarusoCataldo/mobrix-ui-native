@@ -25,6 +25,7 @@ const getAnimatedSequence = (
 const AnimatedMbxView = ({
   children: Children,
   animation,
+  style,
 }: MbxUiNativeAnimatedViewProps) => {
   const initialValues = animation
     ? animationsMap[animation].initial
@@ -72,7 +73,7 @@ const AnimatedMbxView = ({
     },
   });
   return (
-    <Animated.View style={styles.main}>
+    <Animated.View style={[styles.main, style]}>
       <Children
         animate={(anim) => getAnimatedSequence(animations[anim], anim).start()}
       />

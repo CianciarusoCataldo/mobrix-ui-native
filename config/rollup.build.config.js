@@ -3,8 +3,6 @@ const del = require("rollup-plugin-delete");
 const terser = require("@rollup/plugin-terser");
 const copy = require("rollup-plugin-copy");
 const pkg = require("../package.json");
-const alias = require("@rollup/plugin-alias");
-const path = require("path");
 
 module.exports = [
   {
@@ -31,14 +29,6 @@ module.exports = [
     ],
     plugins: [
       del({ targets: ["dist/*", "playground/src/mobrix-ui-native-preview"] }),
-      alias({
-        entries: [
-          {
-            find: "@assets",
-            replacement: path.resolve(__dirname, "src/assets"),
-          },
-        ],
-      }),
       typescript({
         rollupCommonJSResolveHack: false,
         clean: true,
