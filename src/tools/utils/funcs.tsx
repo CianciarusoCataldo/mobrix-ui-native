@@ -62,7 +62,9 @@ export const buildMbxStandardComponent = ({
         };
     return (
       <NativeWrapper
-        // @ts-ignore
+        {...(cprops.animated && {
+          activeOpacity: 0.6,
+        })}
         {...props}
         {...(Component && {
           children:
@@ -85,9 +87,6 @@ export const buildMbxStandardComponent = ({
         key={cprops.key}
         focusable={cprops.a11y}
         {...a11yProps}
-        {...(cprops.animated && {
-          activeOpacity: 0.8,
-        })}
       />
     );
   };

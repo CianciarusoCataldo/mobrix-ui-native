@@ -12,7 +12,7 @@ export { default as CodeBox } from "./CodeBox";
 
 // export { default as FileChooser } from "./FileChooser";
 
-// export { default as IconButton } from "./IconButton";
+export { default as IconButton } from "./IconButton";
 
 // export { default as Image } from "./Image";
 

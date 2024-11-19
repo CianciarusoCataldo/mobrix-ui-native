@@ -1,6 +1,6 @@
 import { Theme } from "../../../types/global/global";
 
-let theme: Record<"main" | "shadow" | "button" | "check", Theme> = {
+let theme: Record<"main" | "shadow" | "button" | "check" | "code", Theme> = {
   main: {
     light: {
       backgroundColor: "#e9e9e9",
@@ -13,19 +13,19 @@ let theme: Record<"main" | "shadow" | "button" | "check", Theme> = {
   },
   shadow: {
     common: {
-      shadowOpacity: 0.8, // opacità dell'ombra
-      // Ombra per Android
-      elevation: 15, // elevate per Android
+      shadowOpacity: 0.8,
+      elevation: 15,
     },
     light: {
-      shadowColor: "#000", // colore dell'ombra
+      shadowColor: "#000",
     },
     dark: {
-      shadowColor: "#000", // colore dell'ombra
+      shadowColor: "#000",
     },
   },
   button: {},
   check: {},
+  code: {},
 };
 
 export const setTheme = (newTheme: typeof theme) => {

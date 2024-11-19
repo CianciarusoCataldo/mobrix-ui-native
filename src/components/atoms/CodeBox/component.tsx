@@ -1,6 +1,5 @@
 import React from "react";
-import { Image, Text, View } from "react-native";
-import Clipboard from "@react-native-clipboard/clipboard";
+import { Clipboard, Image, Text, View } from "react-native";
 
 import {
   BuilderComponent,
@@ -14,6 +13,7 @@ import { getCode } from "./utils";
 
 import { copyIcon } from "../../../assets";
 import Button from "../Button";
+import IconButton from "../IconButton";
 
 const cdbComponent: MbxUiComponent<CodeBoxProps, BuilderComponent[]> = ({
   value = "",
@@ -26,23 +26,19 @@ const cdbComponent: MbxUiComponent<CodeBoxProps, BuilderComponent[]> = ({
 }) => {
   const parse: (inp: string, env: SupportedEnvironment) => CodeBlock[] =
     value.length > 0 ? getCode : (inp, e) => [{ value: inp }];
-
   return [
-    <Button
+    <IconButton
       a11y={a11y}
       key="cd_cp"
       onClick={() => value && Clipboard.setString(value)}
       hide={!copyButton}
       disabled={disabled}
-      hover={hover}
       active={active}
-      shadow={false}
       style={{ width: 25, height: 25, marginLeft: "auto" }}
-      background={false}
     >
       <Image source={copyIcon} style={{ width: 25, height: 25 }} />
-    </Button>,
-    <View key="cd_cd">
+    </IconButton>,
+    <View key="cd_cd" style={{ padding: 10 }}>
       {value.split("\n").map((codl, lIndex) => (
         <Text style={{ margin: 0 }} key={`cd_l_${lIndex}`}>
           {parse(codl, environment).map((cBlock, bIndex) =>

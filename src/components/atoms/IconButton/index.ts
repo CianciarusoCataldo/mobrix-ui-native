@@ -1,18 +1,13 @@
-import { CheckBoxComponent } from "../../../types";
-
-import { buildMbxReactive } from "../../../tools/utils";
-import React from "react";
-import { Image } from "react-native";
-import { tickIcon } from "../../../assets";
-import { extractStyles } from "../../../tools/utils/utils";
-import { getTheme } from "../../../tools/styles/core/theme";
+import { IconButtonComponent } from "../../../types/components/atoms/icon-button";
+import { buildMbxStandard } from "../../../tools/utils";
 
 /**
- * A checkbox element, totally customizable.
+ * An empty button, without additional styles, to make an icon clickable
  *
- * @param {boolean} value Checkbox initial value (checked / unchecked)
- * @param {JSX.Element} icon custom tick icon (if not set, the default one will be used)
- * @param {(newValue: boolean) => void} onChange Callback triggered when CheckBox component input value is changed by the user
+ * @param {JSX.Element | string} children Button content - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Button Button}
+ * @param {() => void} onMouseEnter This callback is triggered everytime the cursor enter the button area - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Button Button}
+ * @param {() => void} onMouseLeave This callback is triggered everytime the cursor exit the button area - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Button Button}
+ * @param {() => void} onClick Callback triggered when Button component is clicked - extended from {@link https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Button Button}
  * @param {string} key - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - React key, the standard [key parameter](https://reactjs.org/docs/lists-and-keys.html)
  * @param {string} className - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - custom className applied on main container
  * @param {boolean} dark - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable dark mode
@@ -36,61 +31,40 @@ import { getTheme } from "../../../tools/styles/core/theme";
  * @param {number | string} tabIndex - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Regular [tabIndex a11y parameter](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex). If `a11y` = `true`, this parameter is passed as `tabIndex` prop to the component (if not set, its value will be `0`). If `a11y` = `false`, it is set to `-1` (so the component is not focusable through `tab` key`)
  *
  *
- * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/CheckBox
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/IconButton
  * @see https://cianciarusocataldo.github.io/mobrix-ui/docs
  *
- * @since 1.0.0
+ * @since 3.0.0
  *
  * @author Cataldo Cianciaruso <https://github.com/CianciarusoCataldo>
  *
  * @copyright 2024 Cataldo Cianciaruso
  */
-const Checkbox: CheckBoxComponent = ({
-  value,
-  onChange = () => {},
-  icon,
+const IconButton: IconButtonComponent = ({
+  children,
+  onClick,
+  active = true,
   ...props
 }) =>
-  buildMbxReactive<boolean>(props, (mbxProps) => {
-    const theme = getTheme();
-    const baseStyles = extractStyles(theme.main, mbxProps.dark);
-    const styles = extractStyles(theme["check"], mbxProps.dark);
-
-    return {
-      name: "check",
-      wrapper: mbxProps.animated ? "TouchableOpacity" : "Pressable",
-      Component: ({ value }) =>
-        value
-          ? icon || (
-              <Image
-                source={tickIcon}
-                style={{
-                  width: 30,
-                  height: 30,
-                  tintColor: styles.color || baseStyles.color,
-                }}
-              />
-            )
-          : "",
-      styles: {
-        width: 35,
-        height: 35,
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 10,
-      },
-      props: (val, setVal) => ({
-        addProps: !mbxProps.disabled && {
-          onPress: () => {
-            onChange(!val);
-            setVal(!val);
-          },
-        },
-        mbxProps,
+  buildMbxStandard({ ...props, active }, (sProps) => ({
+    name: "icb",
+    wrapper: sProps.animated ? "TouchableOpacity" : "Pressable",
+    Component: children,
+    styles: {
+      alignItems: "center",
+      border: 0,
+    },
+    addProps: {
+      ...(!sProps.disabled && {
+        onPress: onClick,
       }),
-      inpV: value,
-      defV: false,
-    };
-  });
+    },
+    mbxProps: {
+      ...sProps,
+      active: sProps.active && onClick !== undefined,
+      shadow: false,
+      background: false,
+    },
+  }));
 
-export default Checkbox;
+export default IconButton;

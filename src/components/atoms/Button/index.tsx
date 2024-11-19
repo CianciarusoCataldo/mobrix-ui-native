@@ -66,7 +66,7 @@ const buttonStyles = {
   fontWeight: "800",
   paddingVertical: 8,
   paddingHorizontal: 16,
-  borderRadius: 4,
+  borderRadius: 5,
   fontSize: 14,
   lineHeight: 20,
 };
