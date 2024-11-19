@@ -1,5 +1,11 @@
 import { BuilderComponent } from "./global";
-export type MobBrixAnimation = "fadeIn" | "fade-out" | "slideIn" | "slideOut";
+export type MoBrixAnimation = "fade-in" | "fade-out" | "slide-in-left" | "slide-in-right" | "slide-in-top" | "slide-in-bottom" | "slide-out-left" | "slide-out-right" | "slide-out-top" | "slide-out-bottom" | "shake" | "scale";
+export type MbxUiNativeAnimatedViewProps = {
+    children: ({ animate, }: {
+        animate: BuilderComponentProps["funcs"]["animate"];
+    }) => JSX.Element;
+    animation?: MoBrixAnimation;
+};
 export type MbxAttributes = {
     /** Enable/disable dark mode (default `false`) */
     dark?: boolean;
@@ -14,6 +20,10 @@ export type MbxAttributes = {
     active?: boolean;
     /** If true, disable the component. The effect may vary depending on the component type */
     disabled?: boolean;
+    /** If `true`, the component is selectable by navigating with tab key (default `true`) */
+    a11y?: boolean;
+    /** If `false`, disable component hover standard styles (default `true`) */
+    hover?: boolean;
 };
 /**
  * Props shared between all {@link https://cianciarusocataldo.github.io/mobrix.ui MoBrix-ui} components
@@ -32,7 +42,7 @@ export type MbxSharedProps = MbxAttributes & {
     /** If `true`, no standard MoBrix-ui styles will be applied on the components (useful for example, with image buttons) (default `false`) */
     unstyled?: boolean;
     /** If `animated`=`true`, this parameter specifies which animation is used when component is rendered */
-    animation?: "fade-in" | "fade-out" | "slide-in-left" | "slide-in-right" | "slide-in-top" | "shake";
+    animation?: MoBrixAnimation;
     /** Custom additional properties, applied to the component */
     props?: Record<string, any>;
     /** if the `a11y` parameter is `true`, this parameter is used as {@link https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-label aria-label} ARIA parameter */
@@ -50,8 +60,8 @@ export type MbxSharedProps = MbxAttributes & {
 export type Wrappers = "TouchableOpacity" | "Pressable" | "Button" | "View" | "Text";
 /** web types */
 export type BuilderComponentProps = {
-    animations: {
-        startScale?: () => void;
+    funcs: {
+        animate: (animation: MoBrixAnimation) => void;
     };
 };
 /**
@@ -76,6 +86,13 @@ export type BuilderProps<T = BuilderComponent | BuilderComponent[]> = {
     styles?: Record<string, any>;
     /** Custom additional properties, applied to the component */
     addProps?: Record<string, any>;
-    animate?: "none" | "scale" | "fade";
     parseProps?: (props: BuilderComponentProps) => Record<string, any>;
+};
+export type MbxUiNativeAnimationAttributes = {
+    opacity: number;
+    translate: {
+        x: number;
+        y: number;
+    };
+    scale: number;
 };

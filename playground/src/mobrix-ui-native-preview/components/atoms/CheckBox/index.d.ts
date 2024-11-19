@@ -1,4 +1,3 @@
-import "./styles.css";
 import { CheckBoxComponent } from "../../../types";
 /**
  * A checkbox element, totally customizable.

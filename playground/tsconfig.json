@@ -3,29 +3,28 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "jsx": "react-native",
-    "strict": true,
-    "esModuleInterop": true,
+    "lib": ["esnext"],
+    "allowJs": true,
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-native",
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
       "@src/*": ["./src/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@images/*": ["./src/assets/images/*"],
-      "@type-defs/*": ["./src/types/*"],
-      "@components/*": ["./src/components/*"],
-      "@atoms/*": ["./src/components/atoms/*"],
-      "@molecules/*": ["./src/components/molecules/*"],
-      "@organisms/*": ["./src/components/organisms/*"],
-      "@screens/*": ["./app/*"],
-      "@sprites/*": ["./src/assets/images/sprites/*"],
+      "@assets/*": ["./assets/*"],
+      "@tests/*": ["./_tests_/*"],
+      "@locales/*": ["./assets/locales/*"],
+      "@hooks/*": ["./src/hooks/*"],
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-  ]
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }

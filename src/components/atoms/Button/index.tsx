@@ -49,10 +49,9 @@ const Button: ButtonComponent = ({
     wrapper: mbxProps.animated ? "TouchableOpacity" : "Pressable",
     styles: buttonStyles,
     mbxProps,
-    animate: "scale",
-    parseProps: ({ animations: { startScale } }) => ({
+    parseProps: ({ funcs: { animate } }) => ({
       onPress: () => {
-        startScale();
+        mbxProps.animated && animate("scale");
         onClick();
       },
     }),

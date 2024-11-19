@@ -1,7 +1,7 @@
 // import "../styles/core/index.css";
 
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { AccessibilityProps, StyleSheet, Text } from "react-native";
 
 import {
   BuilderProps,
@@ -10,10 +10,11 @@ import {
 } from "../../types/global";
 
 import { extractStyles, parseProps } from "./utils";
-import { nativeWrappers, properties } from "./constants";
+import { nativeWrappers } from "./constants";
 import { getTheme } from "../styles/core/theme";
-import AnimatedMbxView from "./AnimatedMbxView";
-import { BuilderComponentProps } from "../../types/global";
+import { MbxUiNativeAnimatedViewProps } from "../../types/global/new";
+
+import AnimatedMbxView from "../animations-manager/AnimatedMbxView";
 
 export const buildMbxStandardComponent = ({
   name,
@@ -23,12 +24,11 @@ export const buildMbxStandardComponent = ({
   wrapper = "View",
   styles = [],
   addProps = {},
-  animate = "none",
   parseProps = () => ({}),
 }: BuilderProps) => {
   const theme = getTheme();
   const baseTheme = extractStyles(theme.main, cprops.dark);
-  const activeTheme = extractStyles(theme[name], cprops.dark);
+  const activeTheme = extractStyles(theme[name] || {}, cprops.dark);
 
   const standardStyles = StyleSheet.create({
     main: activeTheme,
@@ -39,20 +39,27 @@ export const buildMbxStandardComponent = ({
     text: {
       color: activeTheme?.color || baseTheme.color,
     },
+    background: cprops.background ? {} : { backgroundColor: "transparent" },
   });
-
-  const settings = properties[wrapper];
 
   const NativeWrapper = nativeWrappers[wrapper];
 
-  const Children = (childrenprops: BuilderComponentProps) => {
-    const parsedProps = parseProps(childrenprops);
+  const Children: MbxUiNativeAnimatedViewProps["children"] = ({ animate }) => {
+    const parsedProps = parseProps({
+      funcs: { animate },
+    });
     const props: MbxSharedProps & Record<string, any> = {
       ...cprops.props,
       ...addProps,
       ...parsedProps,
     };
 
+    const a11yProps: AccessibilityProps = cprops.a11y
+      ? {}
+      : {
+          importantForAccessibility: "no",
+          accessible: false,
+        };
     return (
       <NativeWrapper
         // @ts-ignore
@@ -60,7 +67,9 @@ export const buildMbxStandardComponent = ({
         {...(Component && {
           children:
             typeof Component === "string" ? (
-              <Text style={standardStyles.text}>{Component}</Text>
+              <Text {...a11yProps} style={standardStyles.text}>
+                {Component}
+              </Text>
             ) : (
               Component
             ),
@@ -71,26 +80,20 @@ export const buildMbxStandardComponent = ({
           standardStyles.main,
           standardStyles.extra,
           standardStyles.custom,
+          standardStyles.background,
         ]}
         key={cprops.key}
-        {...(settings.pressable &&
-          cprops.animated && {
-            activeOpacity: 0.8,
-          })}
+        focusable={cprops.a11y}
+        {...a11yProps}
+        {...(cprops.animated && {
+          activeOpacity: 0.8,
+        })}
       />
     );
   };
 
   return (
-    <AnimatedMbxView
-      settings={
-        cprops.animated && {
-          fadeIn: cprops.animation === "fade-in",
-          scale: animate === "scale",
-        }
-      }
-      Children={Children}
-    />
+    <AnimatedMbxView animation={cprops.animation}>{Children}</AnimatedMbxView>
   );
 };
 

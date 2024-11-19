@@ -23,6 +23,8 @@ export {
   BuilderComponentProps,
   BuilderProps,
   MbxSharedProps,
-  MobBrixAnimation,
+  MoBrixAnimation,
   Wrappers,
+  MbxUiNativeAnimatedViewProps,
+  MbxUiNativeAnimationAttributes,
 } from "./new";

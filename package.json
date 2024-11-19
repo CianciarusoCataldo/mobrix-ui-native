@@ -7,7 +7,8 @@
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
-    "config/rollup.build.config.js"
+    "config/rollup.build.config.js",
+    "src/assets/imgs/*.png"
   ],
   "repository": {
     "type": "git",
@@ -54,8 +55,7 @@
   "homepage": "https://github.com/CianciarusoCataldo/mobrix-ui-native#readme",
   "peerDependencies": {
     "react": ">=18",
-    "react-native": "^0.76.1",
-    "react-native-linear-gradient": "^2.8.3"
+    "react-native": "^0.76.1"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
@@ -81,12 +81,10 @@
     "react-native": "^0.76.1",
     "rollup": "^4.12.0",
     "rollup-plugin-analyzer": "^4.0.0",
-    "rollup-plugin-banner2": "^1.2.2",
     "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-delete": "^2.0.0",
-    "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-typescript2": "^0.36.0",
-    "rollup-plugin-visualizer": "^5.5.4",
     "semver": "^7.6.0",
     "ts-jest": "^29.x.x",
     "typescript": ">4.X.X"

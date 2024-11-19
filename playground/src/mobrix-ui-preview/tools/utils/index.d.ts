@@ -1,1 +1,0 @@
-export { buildMbxStandard } from "./funcs";

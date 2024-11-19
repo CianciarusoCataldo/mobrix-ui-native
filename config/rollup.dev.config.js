@@ -1,7 +1,9 @@
 const typescript = require("rollup-plugin-typescript2");
 // const del = require("rollup-plugin-delete");
 const terser = require("@rollup/plugin-terser");
-
+const copy = require("rollup-plugin-copy");
+const path = require("path");
+const alias = require("@rollup/plugin-alias");
 const pkg = require("../package.json");
 
 module.exports = [
@@ -9,9 +11,8 @@ module.exports = [
     input: "src/index.ts",
     output: [
       {
-        file: "playground/src/mobrix-ui-preview/index.cjs",
+        file: "playground/src/mobrix-ui-native-preview/index.cjs",
         format: "cjs",
-        banner: "require('./styles.css')",
         plugins: [terser()],
       },
       {
@@ -32,6 +33,16 @@ module.exports = [
       typescript({
         rollupCommonJSResolveHack: false,
         clean: true,
+      }),
+      copy({
+        targets: [
+          { src: "src/assets/imgs/*", dest: "dist/imgs" },
+          {
+            src: "src/assets/imgs/*",
+            dest: "playground/src/mobrix-ui-native-preview/imgs",
+          },
+        ],
+        hook: "writeBundle",
       }),
     ],
     treeshake: true,

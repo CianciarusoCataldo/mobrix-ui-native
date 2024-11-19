@@ -1,1 +1,1 @@
-export { buildMbxStandard } from "./funcs";
+export { buildMbxReactive, buildMbxStandard } from "./funcs";
