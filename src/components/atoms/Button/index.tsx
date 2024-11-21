@@ -42,8 +42,8 @@ const Button: ButtonComponent = ({
   onMouseEnter,
   onMouseLeave,
   ...props
-}) => {
-  return buildMbxStandard(props, (mbxProps) => ({
+}) =>
+  buildMbxStandard(props, (mbxProps) => ({
     name: "button",
     Component: children,
     wrapper: mbxProps.animated ? "TouchableOpacity" : "Pressable",
@@ -56,10 +56,8 @@ const Button: ButtonComponent = ({
       },
     }),
   }));
-};
 
 const buttonStyles = {
-  alignSelf: "flex-start",
   alignItems: "center",
   justifyContent: "center",
   borderWidth: 0,

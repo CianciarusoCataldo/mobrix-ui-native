@@ -2,10 +2,7 @@ import { MbxSharedProps } from "../../types";
 import { Theme } from "../../types/global/global";
 import { D_PROPS } from "./constants";
 
-export const extractStyles = (
-  { dark: darkTheme = {}, light = {}, common = {} }: Theme,
-  dark: boolean
-) => (dark ? { ...common, ...darkTheme } : { ...common, ...light });
+
 
 export const capitalize = (inp: string) =>
   inp.replace(/\b\w/g, (l) => l.toUpperCase());

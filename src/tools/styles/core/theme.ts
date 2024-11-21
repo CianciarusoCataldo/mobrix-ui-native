@@ -1,6 +1,9 @@
 import { Theme } from "../../../types/global/global";
 
-let theme: Record<"main" | "shadow" | "button" | "check" | "code", Theme> = {
+let theme: Record<
+  "main" | "shadow" | "button" | "check" | "code" | "count" | "dvd",
+  Theme
+> = {
   main: {
     light: {
       backgroundColor: "#e9e9e9",
@@ -26,6 +29,8 @@ let theme: Record<"main" | "shadow" | "button" | "check" | "code", Theme> = {
   button: {},
   check: {},
   code: {},
+  count: {},
+  dvd: {},
 };
 
 export const setTheme = (newTheme: typeof theme) => {
@@ -40,3 +45,22 @@ export const setComponentTheme = (
 };
 
 export const getTheme = () => theme;
+
+export const extractStyles = (
+  { dark: darkTheme = {}, light = {}, common = {} }: Theme,
+  dark: boolean
+) => (dark ? { ...common, ...darkTheme } : { ...common, ...light });
+
+export const extractAttribute = (
+  attribute: string,
+  key: keyof typeof theme,
+  dark: boolean
+) => {
+  const mainTheme = extractStyles(theme.main, dark);
+  const subTheme = extractStyles(theme[key] || {}, dark);
+
+  return subTheme[attribute] || mainTheme[attribute];
+};
+// dark
+//   ? darkTheme[attribute] || theme.main.dark[attribute]
+//   : light[attribute] || theme.main.light[attribute];

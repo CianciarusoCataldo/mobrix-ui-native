@@ -1,3 +1,4 @@
+import { MutableRefObject } from "react";
 import { BuilderComponent } from "./global";
 export type MoBrixAnimation = "fade-in" | "fade-out" | "slide-in-left" | "slide-in-right" | "slide-in-top" | "slide-in-bottom" | "slide-out-left" | "slide-out-right" | "slide-out-top" | "slide-out-bottom" | "shake" | "scale";
 export type MbxUiNativeAnimatedViewProps = {
@@ -58,7 +59,7 @@ export type MbxSharedProps = MbxAttributes & {
     onKeyDown?: (keyEvent: any) => void;
 };
 /** Supported components wrappers */
-export type Wrappers = "TouchableOpacity" | "Pressable" | "Button" | "View" | "Text";
+export type Wrappers = "TouchableOpacity" | "Pressable" | "Button" | "View" | "Text" | "TextInput";
 /** web types */
 export type BuilderComponentProps = {
     funcs: {
@@ -74,7 +75,7 @@ export type BuilderComponentProps = {
  *
  * @copyright 2024 Cataldo Cianciaruso
  */
-export type BuilderProps<T = BuilderComponent | BuilderComponent[]> = {
+export type BuilderProps<T = BuilderComponent | BuilderComponent[], Ref = any> = {
     /** Component name, required */
     name: string;
     /** Component to render */
@@ -88,6 +89,7 @@ export type BuilderProps<T = BuilderComponent | BuilderComponent[]> = {
     /** Custom additional properties, applied to the component */
     addProps?: Record<string, any>;
     parseProps?: (props: BuilderComponentProps) => Record<string, any>;
+    ref?: MutableRefObject<Ref>;
 };
 export type MbxUiNativeAnimationAttributes = {
     opacity: number;

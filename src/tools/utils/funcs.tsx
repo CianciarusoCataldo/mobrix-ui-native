@@ -9,9 +9,9 @@ import {
   MbxSharedProps,
 } from "../../types/global";
 
-import { extractStyles, parseProps } from "./utils";
+import { parseProps } from "./utils";
 import { nativeWrappers } from "./constants";
-import { getTheme } from "../styles/core/theme";
+import { extractStyles, getTheme } from "../styles/core/theme";
 import { MbxUiNativeAnimatedViewProps } from "../../types/global/new";
 
 import AnimatedMbxView from "../animations-manager/AnimatedMbxView";
@@ -25,6 +25,7 @@ export const buildMbxStandardComponent = ({
   styles = [],
   addProps = {},
   parseProps = () => ({}),
+  ref,
 }: BuilderProps) => {
   const theme = getTheme();
   const baseTheme = extractStyles(theme.main, cprops.dark);
@@ -62,6 +63,7 @@ export const buildMbxStandardComponent = ({
         };
     return (
       <NativeWrapper
+        ref={ref}
         {...(cprops.animated && {
           activeOpacity: 0.6,
         })}
@@ -97,16 +99,17 @@ export const buildMbxStandardComponent = ({
 };
 
 // prettier-ignore
-export const getMbxUiReactive = <T=any>({
+export const getMbxUiReactive = <T=any, Ref=any>({
   defV,
   inpV,
   props,
   Component,
+  ref,
   ...bprops
 }: BuilderPropsReactive<T>) => {
-  const [value, setValue] = React.useState<T>(inpV || defV);
-
-  const parsed = props ? props(value, setValue) : {};
+  const value = React.useRef(inpV||defV)
+  const setValue = (newValue:T)=>{value.current=newValue}
+  const parsed = props ? props(value.current, setValue) : {};
 
   /* istanbul ignore next */
   React.useEffect(() => {
@@ -120,7 +123,7 @@ export const getMbxUiReactive = <T=any>({
   }, [JSON.stringify(inpV)]);
 
   return buildMbxStandardComponent({
-    Component: Component && Component({ value, setValue }),
+    Component: Component && Component({ value:value.current, setValue }),
     ...bprops,
     ...parsed,
   });

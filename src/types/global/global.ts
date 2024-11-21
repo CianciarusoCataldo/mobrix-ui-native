@@ -134,8 +134,6 @@ export interface ClosableComponent {
  */
 export type BuilderComponent = JSX.Element | string;
 
-
-
 /**
  * A standard {@link https://cianciarusocataldo.github.io/mobrix.ui MoBrix-ui} component
  *
@@ -213,7 +211,7 @@ export type BuilderPropsReactive<T = BuilderComponent | BuilderComponent[]> =
   BuilderProps<
     (props: {
       value: T;
-      setValue: React.Dispatch<React.SetStateAction<T>>;
+      setValue: (newValue: T) => void;
     }) => BuilderProps["Component"]
   > & {
     inpV?: T;

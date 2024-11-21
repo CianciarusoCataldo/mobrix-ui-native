@@ -3,7 +3,13 @@ import { ScrollView } from "react-native";
 
 import "@src/localization";
 
-import { Button, CheckBox, CodeBox } from "../mobrix-ui-native-preview";
+import {
+  Button,
+  CheckBox,
+  CodeBox,
+  Counter,
+  Divider,
+} from "../mobrix-ui-native-preview";
 import ToolBox from "../components/molecules/ToolBox";
 
 export default function Home() {
@@ -34,6 +40,15 @@ export default function Home() {
       <ToolBox addProps={{ value: "npm i mobrix-ui-native" }}>
         {CodeBox}
       </ToolBox>
+      <ToolBox>
+        {(props) => (
+          <>
+            <Counter key="cnt-no-arr" {...props} style={{ marginBottom: 15 }} />
+            <Counter {...props} arrows={false} />
+          </>
+        )}
+      </ToolBox>
+      <ToolBox wrapperStyle={{ flex: 1 }}>{Divider}</ToolBox>
     </ScrollView>
   );
 }

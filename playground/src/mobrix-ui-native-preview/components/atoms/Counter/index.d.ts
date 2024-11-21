@@ -1,15 +1,13 @@
-import { CodeBoxComponent } from "../../../types";
-
-import { buildMbxStandard } from "../../../tools/utils";
-
-import component from "./component";
-
+import { CounterComponent } from "../../../types";
 /**
- * A smart code box, to display code text as a compiler. Supports code highlight, with a selectable environment, and multiline strings
+ * A flexible numeric input element
  *
- * @param {string} value code to display - multiline string is supported
- * @param {'javascript' | 'python' | 'terminal' | 'common'} environment environment for text highlight feature, default to 'terminal' (only enabled when 'highlight' is true)
- * @param {boolean} copyButton Enable/disable the copy button
+ * @param {number} value numeric input value
+ * @param {string} placeholder label showed when no value is set
+ * @param {boolean} readOnly if true, component value can only be set with `value` parameter
+ * @param {number} min min allowed value
+ * @param {number} max max allowed value
+ * @param {(newValue: number) => void} onChange Callback triggered when Counter component input value is changed by the user
  * @param {string} key - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - React key, the standard [key parameter](https://reactjs.org/docs/lists-and-keys.html)
  * @param {string} className - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - custom className applied on main container
  * @param {boolean} dark - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable dark mode
@@ -33,7 +31,7 @@ import component from "./component";
  * @param {number | string} tabIndex - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Regular [tabIndex a11y parameter](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex). If `a11y` = `true`, this parameter is passed as `tabIndex` prop to the component (if not set, its value will be `0`). If `a11y` = `false`, it is set to `-1` (so the component is not focusable through `tab` key`)
  *
  *
- * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/CodeBox
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Counter
  * @see https://cianciarusocataldo.github.io/mobrix-ui/docs
  *
  * @since 1.0.0
@@ -42,24 +40,5 @@ import component from "./component";
  *
  * @copyright 2024 Cataldo Cianciaruso
  */
-const CodeBox: CodeBoxComponent = ({ active, ...props }) =>
-  buildMbxStandard(props, (mbxProps) => ({
-    name: "code",
-    mbxProps,
-    styles: internalStyle,
-    Component: component({
-      ...props,
-      ...mbxProps,
-      active,
-    }),
-  }));
-
-const internalStyle = {
-  padding: 1,
-  justifyContent: "center",
-  display: "flex",
-  flexDirection: "column",
-  overflow: "hidden",
-};
-
-export default CodeBox;
+declare const Counter: CounterComponent;
+export default Counter;

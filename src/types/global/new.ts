@@ -1,3 +1,4 @@
+import { MutableRefObject } from "react";
 import { BuilderComponent } from "./global";
 
 export type MoBrixAnimation =
@@ -101,7 +102,8 @@ export type Wrappers =
   | "Pressable"
   | "Button"
   | "View"
-  | "Text";
+  | "Text"
+  | "TextInput";
 /** web types */
 // | "div"
 // | "a"
@@ -131,7 +133,10 @@ export type BuilderComponentProps = {
  *
  * @copyright 2024 Cataldo Cianciaruso
  */
-export type BuilderProps<T = BuilderComponent | BuilderComponent[]> = {
+export type BuilderProps<
+  T = BuilderComponent | BuilderComponent[],
+  Ref = any
+> = {
   /** Component name, required */
   name: string;
 
@@ -151,6 +156,8 @@ export type BuilderProps<T = BuilderComponent | BuilderComponent[]> = {
   addProps?: Record<string, any>;
 
   parseProps?: (props: BuilderComponentProps) => Record<string, any>;
+
+  ref?: MutableRefObject<Ref>;
 };
 
 export type MbxUiNativeAnimationAttributes = {

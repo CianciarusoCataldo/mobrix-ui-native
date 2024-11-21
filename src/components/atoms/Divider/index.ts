@@ -1,15 +1,11 @@
-import { CodeBoxComponent } from "../../../types";
+import { DividerComponent } from "../../../types";
 
 import { buildMbxStandard } from "../../../tools/utils";
 
-import component from "./component";
-
 /**
- * A smart code box, to display code text as a compiler. Supports code highlight, with a selectable environment, and multiline strings
+ * A simple divider, useful to separate sections and paragraphs
  *
- * @param {string} value code to display - multiline string is supported
- * @param {'javascript' | 'python' | 'terminal' | 'common'} environment environment for text highlight feature, default to 'terminal' (only enabled when 'highlight' is true)
- * @param {boolean} copyButton Enable/disable the copy button
+ * @param {string} size Divider size. Can be used any unit (like rem, em or pixels, for example `4px`)
  * @param {string} key - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - React key, the standard [key parameter](https://reactjs.org/docs/lists-and-keys.html)
  * @param {string} className - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - custom className applied on main container
  * @param {boolean} dark - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable dark mode
@@ -33,7 +29,7 @@ import component from "./component";
  * @param {number | string} tabIndex - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Regular [tabIndex a11y parameter](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex). If `a11y` = `true`, this parameter is passed as `tabIndex` prop to the component (if not set, its value will be `0`). If `a11y` = `false`, it is set to `-1` (so the component is not focusable through `tab` key`)
  *
  *
- * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/CodeBox
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Divider
  * @see https://cianciarusocataldo.github.io/mobrix-ui/docs
  *
  * @since 1.0.0
@@ -42,24 +38,30 @@ import component from "./component";
  *
  * @copyright 2024 Cataldo Cianciaruso
  */
-const CodeBox: CodeBoxComponent = ({ active, ...props }) =>
-  buildMbxStandard(props, (mbxProps) => ({
-    name: "code",
-    mbxProps,
-    styles: internalStyle,
-    Component: component({
-      ...props,
-      ...mbxProps,
-      active,
-    }),
-  }));
+const Divider: DividerComponent = ({ unstyled, size = "2", ...props }) =>
+  buildMbxStandard(
+    { ...props, active: false, a11y: false, unstyled: false, hover: false },
+    (mbxProps) => ({
+      name: "dvd",
+      styles: {
+        backgroundColor: "#fff",
+        height: getSize(size),
+        width: "100%",
+        marginHorizontal: 0,
+        marginVertical: 10,
+      },
+      mbxProps,
+    })
+  );
 
-const internalStyle = {
-  padding: 1,
-  justifyContent: "center",
-  display: "flex",
-  flexDirection: "column",
-  overflow: "hidden",
+const getSize = (size: string) => {
+  let parsedSize = 2;
+  try {
+    parsedSize = Number.parseInt(size);
+  } catch {
+    parsedSize = 2;
+  }
+  return parsedSize;
 };
 
-export default CodeBox;
+export default Divider;

@@ -180,7 +180,7 @@ export type DeepPartial<T> = {
 };
 export type BuilderPropsReactive<T = BuilderComponent | BuilderComponent[]> = BuilderProps<(props: {
     value: T;
-    setValue: React.Dispatch<React.SetStateAction<T>>;
+    setValue: (newValue: T) => void;
 }) => BuilderProps["Component"]> & {
     inpV?: T;
     defV: T;

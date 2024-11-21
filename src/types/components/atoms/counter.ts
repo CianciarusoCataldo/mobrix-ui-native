@@ -16,7 +16,7 @@ import {
  */
 export type CounterProps = NumericInputComponent &
   ComponentWithValue<number> &
-  ComponentWithCallback<number>;
+  ComponentWithCallback<number> & { arrows?: boolean };
 
 /**
  * {@link https://cianciarusocataldo.github.io/mobrix-ui MoBrix-ui} Counter component

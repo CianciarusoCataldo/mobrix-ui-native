@@ -29,10 +29,6 @@ module.exports = [
     ],
     plugins: [
       del({ targets: ["dist/*", "playground/src/mobrix-ui-native-preview"] }),
-      typescript({
-        rollupCommonJSResolveHack: false,
-        clean: true,
-      }),
       copy({
         targets: [
           { src: "src/assets/imgs/*", dest: "dist/imgs" },
@@ -42,6 +38,10 @@ module.exports = [
           },
         ],
         hook: "writeBundle",
+      }),
+      typescript({
+        rollupCommonJSResolveHack: false,
+        clean: true,
       }),
     ],
     treeshake: true,

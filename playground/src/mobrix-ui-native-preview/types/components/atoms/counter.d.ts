@@ -8,7 +8,9 @@ import { ComponentWithCallback, ComponentWithValue, MbxUiComponent, NumericInput
  *
  * @copyright 2024 Cataldo Cianciaruso
  */
-export type CounterProps = NumericInputComponent & ComponentWithValue<number> & ComponentWithCallback<number>;
+export type CounterProps = NumericInputComponent & ComponentWithValue<number> & ComponentWithCallback<number> & {
+    arrows?: boolean;
+};
 /**
  * {@link https://cianciarusocataldo.github.io/mobrix-ui MoBrix-ui} Counter component
  *

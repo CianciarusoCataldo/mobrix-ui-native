@@ -4,8 +4,7 @@ import { buildMbxReactive } from "../../../tools/utils";
 import React from "react";
 import { Image } from "react-native";
 import { tickIcon } from "../../../assets";
-import { extractStyles } from "../../../tools/utils/utils";
-import { getTheme } from "../../../tools/styles/core/theme";
+import { extractAttribute } from "../../../tools/styles/core/theme";
 
 /**
  * A checkbox element, totally customizable.
@@ -52,9 +51,7 @@ const Checkbox: CheckBoxComponent = ({
   ...props
 }) =>
   buildMbxReactive<boolean>(props, (mbxProps) => {
-    const theme = getTheme();
-    const baseStyles = extractStyles(theme.main, mbxProps.dark);
-    const styles = extractStyles(theme["check"], mbxProps.dark);
+    const color = extractAttribute("color", "check", mbxProps.dark);
 
     return {
       name: "check",
@@ -67,18 +64,12 @@ const Checkbox: CheckBoxComponent = ({
                 style={{
                   width: 30,
                   height: 30,
-                  tintColor: styles.color || baseStyles.color,
+                  tintColor: color,
                 }}
               />
             )
           : "",
-      styles: {
-        width: 35,
-        height: 35,
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 10,
-      },
+      styles: internalStyles,
       props: (val, setVal) => ({
         addProps: !mbxProps.disabled && {
           onPress: () => {
@@ -94,3 +85,11 @@ const Checkbox: CheckBoxComponent = ({
   });
 
 export default Checkbox;
+
+const internalStyles = {
+  width: 35,
+  height: 35,
+  justifyContent: "center",
+  alignItems: "center",
+  padding: 10,
+};

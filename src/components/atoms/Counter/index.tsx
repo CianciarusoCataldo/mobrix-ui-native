@@ -1,15 +1,33 @@
-import { CodeBoxComponent } from "../../../types";
+import { CounterComponent } from "../../../types";
 
 import { buildMbxStandard } from "../../../tools/utils";
+import { useState } from "react";
+import { StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
+import React from "react";
+import { extractAttribute } from "../../../tools/styles/core/theme";
 
-import component from "./component";
-
+const arrowProps: Record<
+  "left" | "right",
+  { text: string; callback: (value: number) => number }
+> = {
+  left: {
+    text: "<",
+    callback: (value) => value - 1,
+  },
+  right: {
+    text: ">",
+    callback: (value) => value + 1,
+  },
+};
 /**
- * A smart code box, to display code text as a compiler. Supports code highlight, with a selectable environment, and multiline strings
+ * A flexible numeric input element
  *
- * @param {string} value code to display - multiline string is supported
- * @param {'javascript' | 'python' | 'terminal' | 'common'} environment environment for text highlight feature, default to 'terminal' (only enabled when 'highlight' is true)
- * @param {boolean} copyButton Enable/disable the copy button
+ * @param {number} value numeric input value
+ * @param {string} placeholder label showed when no value is set
+ * @param {boolean} readOnly if true, component value can only be set with `value` parameter
+ * @param {number} min min allowed value
+ * @param {number} max max allowed value
+ * @param {(newValue: number) => void} onChange Callback triggered when Counter component input value is changed by the user
  * @param {string} key - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - React key, the standard [key parameter](https://reactjs.org/docs/lists-and-keys.html)
  * @param {string} className - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - custom className applied on main container
  * @param {boolean} dark - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable dark mode
@@ -33,7 +51,7 @@ import component from "./component";
  * @param {number | string} tabIndex - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Regular [tabIndex a11y parameter](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex). If `a11y` = `true`, this parameter is passed as `tabIndex` prop to the component (if not set, its value will be `0`). If `a11y` = `false`, it is set to `-1` (so the component is not focusable through `tab` key`)
  *
  *
- * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/CodeBox
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Counter
  * @see https://cianciarusocataldo.github.io/mobrix-ui/docs
  *
  * @since 1.0.0
@@ -42,24 +60,92 @@ import component from "./component";
  *
  * @copyright 2024 Cataldo Cianciaruso
  */
-const CodeBox: CodeBoxComponent = ({ active, ...props }) =>
-  buildMbxStandard(props, (mbxProps) => ({
-    name: "code",
-    mbxProps,
-    styles: internalStyle,
-    Component: component({
-      ...props,
-      ...mbxProps,
-      active,
-    }),
-  }));
+const Counter: CounterComponent = ({
+  /* istanbul ignore next */
+  onChange = () => {},
+  value = 0,
+  placeholder,
+  readOnly,
+  max,
+  min,
+  arrows = true,
+  ...props
+}) =>
+  buildMbxStandard(props, (mbxProps) => {
+    const Children = () => {
+      const [val, setVal] = useState(Number.isFinite(value) ? value : 0);
+      const color = extractAttribute("color", "count", mbxProps.dark);
 
-const internalStyle = {
-  padding: 1,
-  justifyContent: "center",
-  display: "flex",
-  flexDirection: "column",
-  overflow: "hidden",
-};
+      const Arrow = ({ direction }: { direction: "left" | "right" }) =>
+        arrows && (
+          <TouchableOpacity
+            key={`arrow-${direction}`}
+            onLongPress={() => {}}
+            onPress={() => {
+              const newVal = arrowProps[direction].callback(val);
+              onChange(newVal);
+              setVal(newVal);
+            }}
+            style={styles.arrow}
+          >
+            <Text style={[styles.arrowText, { color }]}>
+              {arrowProps[direction].text}
+            </Text>
+          </TouchableOpacity>
+        );
 
-export default CodeBox;
+      return [
+        <Arrow key="left" direction="left" />,
+        <TextInput
+          style={{
+            color,
+            textAlign: "center",
+          }}
+          key="number-input"
+          value={String(val)}
+          keyboardType="numeric"
+          placeholder={placeholder}
+          onChangeText={(text) => {
+            if (!readOnly && !mbxProps.disabled) {
+              try {
+                const cleanedValue = text.replace(/[^0-9]/g, "");
+
+                const numericValue = cleanedValue
+                  ? parseInt(cleanedValue, 10)
+                  : 0;
+
+                setVal(numericValue);
+                onChange(numericValue);
+              } catch (e) {}
+            }
+          }}
+        />,
+        <Arrow key="right" direction="right" />,
+        ,
+      ];
+    };
+
+    return {
+      name: "count",
+      styles: {
+        flexDirection: "row",
+        borderRadius: arrows ? 30 : 3,
+      },
+      Component: <Children />,
+      mbxProps,
+    };
+  });
+
+const styles = StyleSheet.create({
+  arrow: {
+    padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  arrowText: {
+    fontSize: 18,
+    color: "#333",
+  },
+});
+
+export default Counter;

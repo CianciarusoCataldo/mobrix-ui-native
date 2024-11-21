@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { Button as Button$1, TouchableOpacity, Pressable, Text, View, Dimensions, Animated, StyleSheet, Image, Clipboard } from 'react-native';
+import React, { useRef, useEffect, useState } from 'react';
+import { Button as Button$1, TouchableOpacity, Pressable, Text, View, TextInput, Dimensions, Animated, StyleSheet, Image, Clipboard } from 'react-native';
 
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -64,12 +64,9 @@ var nativeWrappers = {
     Pressable: Pressable,
     Text: Text,
     View: View,
+    TextInput: TextInput,
 };
 
-var extractStyles = function (_a, dark) {
-    var _b = _a.dark, darkTheme = _b === void 0 ? {} : _b, _c = _a.light, light = _c === void 0 ? {} : _c, _d = _a.common, common = _d === void 0 ? {} : _d;
-    return (dark ? __assign(__assign({}, common), darkTheme) : __assign(__assign({}, common), light));
-};
 var parseProps = function (props) { return (__assign(__assign(__assign(__assign(__assign({}, D_PROPS), props), (props.unstyled && {
     shadow: false,
     background: false,
@@ -110,6 +107,8 @@ var theme = {
     button: {},
     check: {},
     code: {},
+    count: {},
+    dvd: {},
 };
 var setTheme = function (newTheme) {
     theme = newTheme;
@@ -118,6 +117,18 @@ var setComponentTheme = function (component, newTheme) {
     theme[component] = newTheme;
 };
 var getTheme = function () { return theme; };
+var extractStyles = function (_a, dark) {
+    var _b = _a.dark, darkTheme = _b === void 0 ? {} : _b, _c = _a.light, light = _c === void 0 ? {} : _c, _d = _a.common, common = _d === void 0 ? {} : _d;
+    return (dark ? __assign(__assign({}, common), darkTheme) : __assign(__assign({}, common), light));
+};
+var extractAttribute = function (attribute, key, dark) {
+    var mainTheme = extractStyles(theme.main, dark);
+    var subTheme = extractStyles(theme[key] || {}, dark);
+    return subTheme[attribute] || mainTheme[attribute];
+};
+// dark
+//   ? darkTheme[attribute] || theme.main.dark[attribute]
+//   : light[attribute] || theme.main.light[attribute];
 
 var _a = Dimensions.get("window"), width = _a.width, height = _a.height;
 var defaultAnimationValues = {
@@ -261,7 +272,7 @@ var buildMbxStandardComponent = function (_a) {
     /* istanbul ignore next */
     _b = _a.mbxProps, 
     /* istanbul ignore next */
-    cprops = _b === void 0 ? {} : _b, _c = _a.wrapper, wrapper = _c === void 0 ? "View" : _c, _d = _a.styles, styles = _d === void 0 ? [] : _d, _e = _a.addProps, addProps = _e === void 0 ? {} : _e, _f = _a.parseProps, parseProps = _f === void 0 ? function () { return ({}); } : _f;
+    cprops = _b === void 0 ? {} : _b, _c = _a.wrapper, wrapper = _c === void 0 ? "View" : _c, _d = _a.styles, styles = _d === void 0 ? [] : _d, _e = _a.addProps, addProps = _e === void 0 ? {} : _e, _f = _a.parseProps, parseProps = _f === void 0 ? function () { return ({}); } : _f, ref = _a.ref;
     var theme = getTheme();
     var baseTheme = extractStyles(theme.main, cprops.dark);
     var activeTheme = extractStyles(theme[name] || {}, cprops.dark);
@@ -289,7 +300,7 @@ var buildMbxStandardComponent = function (_a) {
                 importantForAccessibility: "no",
                 accessible: false,
             };
-        return (React.createElement(NativeWrapper, __assign({}, (cprops.animated && {
+        return (React.createElement(NativeWrapper, __assign({ ref: ref }, (cprops.animated && {
             activeOpacity: 0.6,
         }), props, (Component && {
             children: typeof Component === "string" ? (React.createElement(Text, __assign({}, a11yProps, { style: standardStyles.text }), Component)) : (Component),
@@ -306,9 +317,10 @@ var buildMbxStandardComponent = function (_a) {
 };
 // prettier-ignore
 var getMbxUiReactive = function (_a) {
-    var defV = _a.defV, inpV = _a.inpV, props = _a.props, Component = _a.Component, bprops = __rest(_a, ["defV", "inpV", "props", "Component"]);
-    var _b = React.useState(inpV || defV), value = _b[0], setValue = _b[1];
-    var parsed = props ? props(value, setValue) : {};
+    var defV = _a.defV, inpV = _a.inpV, props = _a.props, Component = _a.Component; _a.ref; var bprops = __rest(_a, ["defV", "inpV", "props", "Component", "ref"]);
+    var value = React.useRef(inpV || defV);
+    var setValue = function (newValue) { value.current = newValue; };
+    var parsed = props ? props(value.current, setValue) : {};
     /* istanbul ignore next */
     React.useEffect(function () {
         if (inpV !== undefined &&
@@ -317,7 +329,7 @@ var getMbxUiReactive = function (_a) {
             setValue(inpV);
         }
     }, [JSON.stringify(inpV)]);
-    return buildMbxStandardComponent(__assign(__assign({ Component: Component && Component({ value: value, setValue: setValue }) }, bprops), parsed));
+    return buildMbxStandardComponent(__assign(__assign({ Component: Component && Component({ value: value.current, setValue: setValue }) }, bprops), parsed));
 };
 var parse = function (
 /* istanbul ignore next */
@@ -386,7 +398,6 @@ var Button = function (_a) {
     }); });
 };
 var buttonStyles = {
-    alignSelf: "flex-start",
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 0,
@@ -442,9 +453,7 @@ var copyIcon = require("./imgs/copy.png");
 var Checkbox = function (_a) {
     var value = _a.value, _b = _a.onChange, onChange = _b === void 0 ? function () { } : _b, icon = _a.icon, props = __rest(_a, ["value", "onChange", "icon"]);
     return buildMbxReactive(props, function (mbxProps) {
-        var theme = getTheme();
-        var baseStyles = extractStyles(theme.main, mbxProps.dark);
-        var styles = extractStyles(theme["check"], mbxProps.dark);
+        var color = extractAttribute("color", "check", mbxProps.dark);
         return {
             name: "check",
             wrapper: mbxProps.animated ? "TouchableOpacity" : "Pressable",
@@ -454,17 +463,11 @@ var Checkbox = function (_a) {
                     ? icon || (React.createElement(Image, { source: tickIcon, style: {
                             width: 30,
                             height: 30,
-                            tintColor: styles.color || baseStyles.color,
+                            tintColor: color,
                         } }))
                     : "";
             },
-            styles: {
-                width: 35,
-                height: 35,
-                justifyContent: "center",
-                alignItems: "center",
-                padding: 10,
-            },
+            styles: internalStyles,
             props: function (val, setVal) { return ({
                 addProps: !mbxProps.disabled && {
                     onPress: function () {
@@ -478,6 +481,13 @@ var Checkbox = function (_a) {
             defV: false,
         };
     });
+};
+var internalStyles = {
+    width: 35,
+    height: 35,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
 };
 
 var cColor = ["#d81313", "#f6713c", "#3b82f6", "#2432f5", "#5b9306"];
@@ -675,15 +685,191 @@ var CodeBox = function (_a) {
     return buildMbxStandard(props, function (mbxProps) { return ({
         name: "code",
         mbxProps: mbxProps,
-        styles: {
-            padding: 1,
-            justifyContent: "center",
-            display: "flex",
-            flexDirection: "column",
-            overflow: "hidden",
-        },
+        styles: internalStyle,
         Component: cdbComponent(__assign(__assign(__assign({}, props), mbxProps), { active: active })),
     }); });
 };
+var internalStyle = {
+    padding: 1,
+    justifyContent: "center",
+    display: "flex",
+    flexDirection: "column",
+    overflow: "hidden",
+};
 
-export { Button, Checkbox as CheckBox, CodeBox, IconButton, setComponentTheme, setTheme };
+var arrowProps = {
+    left: {
+        text: "<",
+        callback: function (value) { return value - 1; },
+    },
+    right: {
+        text: ">",
+        callback: function (value) { return value + 1; },
+    },
+};
+/**
+ * A flexible numeric input element
+ *
+ * @param {number} value numeric input value
+ * @param {string} placeholder label showed when no value is set
+ * @param {boolean} readOnly if true, component value can only be set with `value` parameter
+ * @param {number} min min allowed value
+ * @param {number} max max allowed value
+ * @param {(newValue: number) => void} onChange Callback triggered when Counter component input value is changed by the user
+ * @param {string} key - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - React key, the standard [key parameter](https://reactjs.org/docs/lists-and-keys.html)
+ * @param {string} className - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - custom className applied on main container
+ * @param {boolean} dark - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable dark mode
+ * @param {boolean} hide - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Hide/show component
+ * @param {string} id - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - [id parameter](https://www.w3schools.com/html/html_id.asp) (for styling/testing purpose, to easily find the component into the DOM)
+ * @param {boolean} shadow - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable shadow behind component
+ * @param {CSSProperties} style - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Css inline properties applied on main container
+ * @param {boolean} unstyled - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If `true`, no standard MoBrix-ui styles will be applied on the components (useful for example, with image buttons)
+ * @param {boolean} animated - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component animations
+ * @param {'fade-in' | 'slide-in-left' | 'slide-in-right' | 'slide-in-top' | 'shake'} animation - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If `animated`=`true`, this parameter specifies which animation is used when component is rendered
+ * @param {boolean} background - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component background
+ * @param {boolean} hover - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component hover standard styles
+ * @param {boolean} active - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component click standard styles
+ * @param {boolean} disabled - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If true, disable the component. The effect may vary depending on the component type
+ * @param {(keyEvent : any) => void} onKeyDown - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom callback triggered when a key is pressed while using the component (for example, when writing text inside an `Input` component).
+ * @param {() => void} onFocus - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom callback triggered when the component get the focus (for example, through tab key)
+ * @param {() => void} onFocusLost - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom callback triggered when the component lose the focus (for example, when user clicks outside it)
+ * @param {Record<string, any>} props - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom additional properties, applied to the component
+ * @param {boolean} a11y - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable accessibility features
+ * @param {string} a11yLabel - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If `a11y` = `true`, is used as [aria-label](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-label) accessibility parameter
+ * @param {number | string} tabIndex - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Regular [tabIndex a11y parameter](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex). If `a11y` = `true`, this parameter is passed as `tabIndex` prop to the component (if not set, its value will be `0`). If `a11y` = `false`, it is set to `-1` (so the component is not focusable through `tab` key`)
+ *
+ *
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Counter
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/docs
+ *
+ * @since 1.0.0
+ *
+ * @author Cataldo Cianciaruso <https://github.com/CianciarusoCataldo>
+ *
+ * @copyright 2024 Cataldo Cianciaruso
+ */
+var Counter = function (_a) {
+    var /* istanbul ignore next */
+    _b = _a.onChange, 
+    /* istanbul ignore next */
+    onChange = _b === void 0 ? function () { } : _b, _c = _a.value, value = _c === void 0 ? 0 : _c, placeholder = _a.placeholder, readOnly = _a.readOnly; _a.max; _a.min; var _d = _a.arrows, arrows = _d === void 0 ? true : _d, props = __rest(_a, ["onChange", "value", "placeholder", "readOnly", "max", "min", "arrows"]);
+    return buildMbxStandard(props, function (mbxProps) {
+        var Children = function () {
+            var _a = useState(Number.isFinite(value) ? value : 0), val = _a[0], setVal = _a[1];
+            var color = extractAttribute("color", "count", mbxProps.dark);
+            var Arrow = function (_a) {
+                var direction = _a.direction;
+                return arrows && (React.createElement(TouchableOpacity, { key: "arrow-".concat(direction), onLongPress: function () { }, onPress: function () {
+                        var newVal = arrowProps[direction].callback(val);
+                        onChange(newVal);
+                        setVal(newVal);
+                    }, style: styles.arrow },
+                    React.createElement(Text, { style: [styles.arrowText, { color: color }] }, arrowProps[direction].text)));
+            };
+            return [
+                React.createElement(Arrow, { key: "left", direction: "left" }),
+                React.createElement(TextInput, { style: {
+                        color: color,
+                        textAlign: "center",
+                    }, key: "number-input", value: String(val), keyboardType: "numeric", placeholder: placeholder, onChangeText: function (text) {
+                        if (!readOnly && !mbxProps.disabled) {
+                            try {
+                                var cleanedValue = text.replace(/[^0-9]/g, "");
+                                var numericValue = cleanedValue
+                                    ? parseInt(cleanedValue, 10)
+                                    : 0;
+                                setVal(numericValue);
+                                onChange(numericValue);
+                            }
+                            catch (e) { }
+                        }
+                    } }),
+                React.createElement(Arrow, { key: "right", direction: "right" }),
+                ,
+            ];
+        };
+        return {
+            name: "count",
+            styles: {
+                flexDirection: "row",
+                borderRadius: arrows ? 30 : 3,
+            },
+            Component: React.createElement(Children, null),
+            mbxProps: mbxProps,
+        };
+    });
+};
+var styles = StyleSheet.create({
+    arrow: {
+        padding: 10,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    arrowText: {
+        fontSize: 18,
+        color: "#333",
+    },
+});
+
+/**
+ * A simple divider, useful to separate sections and paragraphs
+ *
+ * @param {string} size Divider size. Can be used any unit (like rem, em or pixels, for example `4px`)
+ * @param {string} key - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - React key, the standard [key parameter](https://reactjs.org/docs/lists-and-keys.html)
+ * @param {string} className - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - custom className applied on main container
+ * @param {boolean} dark - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable dark mode
+ * @param {boolean} hide - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Hide/show component
+ * @param {string} id - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - [id parameter](https://www.w3schools.com/html/html_id.asp) (for styling/testing purpose, to easily find the component into the DOM)
+ * @param {boolean} shadow - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable shadow behind component
+ * @param {CSSProperties} style - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Css inline properties applied on main container
+ * @param {boolean} unstyled - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If `true`, no standard MoBrix-ui styles will be applied on the components (useful for example, with image buttons)
+ * @param {boolean} animated - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component animations
+ * @param {'fade-in' | 'slide-in-left' | 'slide-in-right' | 'slide-in-top' | 'shake'} animation - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If `animated`=`true`, this parameter specifies which animation is used when component is rendered
+ * @param {boolean} background - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component background
+ * @param {boolean} hover - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component hover standard styles
+ * @param {boolean} active - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable component click standard styles
+ * @param {boolean} disabled - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If true, disable the component. The effect may vary depending on the component type
+ * @param {(keyEvent : any) => void} onKeyDown - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom callback triggered when a key is pressed while using the component (for example, when writing text inside an `Input` component).
+ * @param {() => void} onFocus - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom callback triggered when the component get the focus (for example, through tab key)
+ * @param {() => void} onFocusLost - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom callback triggered when the component lose the focus (for example, when user clicks outside it)
+ * @param {Record<string, any>} props - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Custom additional properties, applied to the component
+ * @param {boolean} a11y - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Enable/disable accessibility features
+ * @param {string} a11yLabel - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - If `a11y` = `true`, is used as [aria-label](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-label) accessibility parameter
+ * @param {number | string} tabIndex - {@link https://cianciarusocataldo.github.io/mobrix-ui/docs/#/guide?id=shared-properties shared MoBrix-ui property} - Regular [tabIndex a11y parameter](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex). If `a11y` = `true`, this parameter is passed as `tabIndex` prop to the component (if not set, its value will be `0`). If `a11y` = `false`, it is set to `-1` (so the component is not focusable through `tab` key`)
+ *
+ *
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/components/atoms/Divider
+ * @see https://cianciarusocataldo.github.io/mobrix-ui/docs
+ *
+ * @since 1.0.0
+ *
+ * @author Cataldo Cianciaruso <https://github.com/CianciarusoCataldo>
+ *
+ * @copyright 2024 Cataldo Cianciaruso
+ */
+var Divider = function (_a) {
+    _a.unstyled; var _b = _a.size, size = _b === void 0 ? "2" : _b, props = __rest(_a, ["unstyled", "size"]);
+    return buildMbxStandard(__assign(__assign({}, props), { active: false, a11y: false, unstyled: false, hover: false }), function (mbxProps) { return ({
+        name: "dvd",
+        styles: {
+            backgroundColor: "#fff",
+            height: getSize(size),
+            width: "100%",
+            marginHorizontal: 0,
+            marginVertical: 10,
+        },
+        mbxProps: mbxProps,
+    }); });
+};
+var getSize = function (size) {
+    var parsedSize = 2;
+    try {
+        parsedSize = Number.parseInt(size);
+    }
+    catch (_a) {
+        parsedSize = 2;
+    }
+    return parsedSize;
+};
+
+export { Button, Checkbox as CheckBox, CodeBox, Counter, Divider, IconButton, setComponentTheme, setTheme };

@@ -13,10 +13,13 @@ const ToolBox = ({
   children: Children,
   addProps = {},
   name,
+  wrapperStyle,
 }: {
   children: (props: MbxUiProps & Record<string, unknown>) => JSX.Element;
   addProps?: Record<string, unknown>;
   name?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  wrapperStyle?: Record<string, any>;
 }) => {
   const [dark, setDark] = useState(false);
   const [a11y, setA11y] = useState(true);
@@ -121,20 +124,23 @@ const ToolBox = ({
       </View>
       <View
         style={[
-          internalStyles.container,
+          wrapperStyle || internalStyles.container,
           {
             marginTop: 50,
             marginBottom: 20,
+            backgroundColor: "red",
           },
         ]}
       >
         <Children
+          key={name}
           dark={dark}
           shadow={shadow}
           animated={animated}
           animation={animations[animation]}
           background={background}
           a11y={a11y}
+          value={"initial value"}
           {...addProps}
         />
       </View>
